@@ -89,7 +89,7 @@ export default function About() {
       >
         <div className="absolute inset-0 bg-black/35"></div>
         <div className="relative z-10 text-center max-w-2xl px-6">
-          <h1 className="text-5xl text-center mb-4" style={{ color: '#1F1F1F', fontWeight: 600 }}>
+          <h1 className="text-4xl text-center mb-4" style={{ color: '#1F1F1F', fontWeight: 400 }}>
             About Us
           </h1>
           <p
@@ -102,7 +102,7 @@ export default function About() {
       </section>
 
       {/* Meet Our Founder Section */}
-      <section className="bg-white" style={{ paddingTop: '80px', paddingBottom: '80px' }}>
+      <section className="bg-white" style={{ paddingTop: '50px', paddingBottom: '80px' }}>
         <div className="max-w-5xl mx-auto px-6">
           {/* Founder Header - Centered */}
           <div className="text-center mb-20">
