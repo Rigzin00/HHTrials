@@ -1,6 +1,63 @@
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { useEffect, useRef } from 'react';
+import 'swiper/css';
+
+// Images from public/assets/img folder
+const slides = [
+  { id: 1, image: '/public/img/Rectangle 41.png', alt: 'Slide 1' },
+  { id: 2, image: '/public/img/Rectangle 42.png', alt: 'Slide 2' },
+  { id: 3, image: '/public/img/Rectangle 43.png', alt: 'Slide 3' },
+  { id: 4, image: '/public/img/Rectangle 44.png', alt: 'Slide 4' },
+  { id: 5, image: '/public/img/Rectangle 45.png', alt: 'Slide 5' },
+  { id: 6, image: '/public/img/Rectangle 46.png', alt: 'Slide 6' },
+  { id: 7, image: '/public/img/Rectangle 47.png', alt: 'Slide 7' },
+  { id: 8, image: '/public/img/Rectangle 48.png', alt: 'Slide 8' },
+];
+
+// 🔁 Duplicate slides to fake infinity
+const repeatedSlides = [
+  ...slides,
+  ...slides,
+  ...slides,
+  ...slides,
+];
+
 const Home = () => {
+  const swiperRef = useRef(null);
+
+  useEffect(() => {
+    if (!swiperRef.current) return;
+
+    const swiper = swiperRef.current;
+    let rafId;
+    const SPEED = 1; // px per frame
+
+    // Wait for swiper to be fully initialized
+    setTimeout(() => {
+      const resetPoint = swiper.wrapperEl.scrollWidth / 2;
+
+      const animate = () => {
+        if (!swiper.destroyed) {
+          swiper.setTranslate(swiper.translate - SPEED);
+
+          // seamless reset
+          if (Math.abs(swiper.translate) >= resetPoint) {
+            swiper.setTranslate(0);
+          }
+
+          rafId = requestAnimationFrame(animate);
+        }
+      };
+
+      animate();
+    }, 100);
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   return (
-    
     <div className="flex-grow pt-[72px] min-h-screen bg-[#2B1E17]">
       {/* Hero Text */}
       <div className="max-w-4xl mx-auto text-center pt-24 px-6 font-berlin">
@@ -14,6 +71,35 @@ const Home = () => {
           OF MOUNTAINS
         </h1>
       </div>
+
+      {/* Panorama Swiper */}
+      <section className="panorama-section">
+        <div className="panorama-container">
+          <div className="panorama-swiper">
+            <Swiper
+              slidesPerView="auto"
+              spaceBetween={20}
+              allowTouchMove={false}
+              loop={false}
+              speed={0}
+              className="panorama-swiper-instance"
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+            >
+              {repeatedSlides.map((slide, index) => (
+                <SwiperSlide key={index} className="panorama-slide">
+                  <img
+                    src={slide.image}
+                    alt={slide.alt}
+                    draggable={false}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      </section>
 
       {/* Search Bar */}
       <div className="mt-20 px-6">
