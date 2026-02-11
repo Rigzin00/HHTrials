@@ -105,7 +105,7 @@ export default function About() {
       <section className="bg-white" style={{ paddingTop: '50px', paddingBottom: '80px' }}>
         <div className="max-w-5xl mx-auto px-6">
           {/* Founder Header - Centered */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-12">
             <h2 className="text-4xl mb-3" style={{ color: '#2B1E17', fontWeight: 600 }}>
               Meet Our Founder
             </h2>
@@ -118,131 +118,95 @@ export default function About() {
           </div>
 
           {/* Founder Content - 2 Column Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+          <div className="flex items-stretch gap-7 ml-5 mr-5">
+            
             {/* Left Column - Image */}
-            <div>
+            <div className="flex-shrink-0">
               <img
                 src="/imagewithfallback.png"
                 alt="Dr. Sonam Wangchok"
-                className="w-full rounded-2xl overflow-hidden shadow-lg h-80 object-cover"
-                style={{ borderRadius: '16px' }}
+                className="w-72 h-72 object-cover rounded-2xl shadow-lg"
               />
             </div>
 
-            {/* Right Column - Text & Cards */}
-            <div className="space-y-8">
+            {/* Right Column */}
+            <div className="flex flex-col justify-between h-72 flex-1">
+
               {/* Paragraph */}
               <p
-                className="text-sm leading-relaxed"
-                style={{ color: '#6B5E55', fontWeight: 400, lineHeight: '1.6' }}
+                className="text-sm leading-relaxed text-justify"
+                style={{ color: '#6B5E55', fontWeight: 400 }}
               >
                 A leading authority on Ladakh's heritage with 15+ years dedicated to preserving and sharing the rich cultural tapestry of the Himalayas. Native to Staksmo village, Dr. Wangchok bridges academic expertise with lived cultural experience.
               </p>
 
-              {/* Info Cards Grid - 2x2 */}
-              <div className="grid grid-cols-2 gap-6">
-                {/* Card 1 - Heritage Expert */}
-                <div
-                  className="p-5 rounded-lg"
-                  style={{ backgroundColor: '#F9F8F4' }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
-                    style={{ backgroundColor: '#F4A321' }}
-                  >
-                    <Award className="w-5 h-5 text-white" style={{ width: '20px', height: '20px' }} />
+              {/* Cards Grid */}
+              <div className="grid grid-cols-2 gap-4">
+
+                {/* Card 1 */}
+                <div className="p-4 rounded-lg flex items-start gap-3 bg-[#F9F8F4]">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#F4A321]">
+                    <Award className="w-5 h-5 text-white" />
                   </div>
-                  <h4
-                    className="text-sm font-semibold mb-2"
-                    style={{ color: '#2B1E17', fontWeight: 500 }}
-                  >
-                    Heritage Expert
-                  </h4>
-                  <p
-                    className="text-xs leading-relaxed"
-                    style={{ color: '#6B5E55', fontWeight: 400, lineHeight: '1.4' }}
-                  >
-                    UNESCO & government preservation projects
-                  </p>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#2B1E17]">
+                      Heritage Expert
+                    </h4>
+                    <p className="text-xs text-[#6B5E55]">
+                      UNESCO & government preservation projects
+                    </p>
+                  </div>
                 </div>
 
-                {/* Card 2 - Academic Background */}
-                <div
-                  className="p-5 rounded-lg"
-                  style={{ backgroundColor: '#F9F8F4' }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
-                    style={{ backgroundColor: '#F4A321' }}
-                  >
-                    <Briefcase className="w-5 h-5 text-white" style={{ width: '20px', height: '20px' }} />
+                {/* Card 2 */}
+                <div className="p-4 rounded-lg flex items-start gap-3 bg-[#F9F8F4]">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#F4A321]">
+                    <Briefcase className="w-5 h-5 text-white" />
                   </div>
-                  <h4
-                    className="text-sm font-semibold mb-2"
-                    style={{ color: '#2B1E17', fontWeight: 500 }}
-                  >
-                    Academic Background
-                  </h4>
-                  <p
-                    className="text-xs leading-relaxed"
-                    style={{ color: '#6B5E55', fontWeight: 400, lineHeight: '1.4' }}
-                  >
-                    Cultural anthropology & heritage management
-                  </p>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#2B1E17]">
+                      Academic Background
+                    </h4>
+                    <p className="text-xs text-[#6B5E55]">
+                      Cultural anthropology & heritage management
+                    </p>
+                  </div>
                 </div>
 
-                {/* Card 3 - Specialization */}
-                <div
-                  className="p-5 rounded-lg"
-                  style={{ backgroundColor: '#F9F8F4' }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
-                    style={{ backgroundColor: '#F4A321' }}
-                  >
-                    <MapPin className="w-5 h-5 text-white" style={{ width: '20px', height: '20px' }} />
+                {/* Card 3 */}
+                <div className="p-4 rounded-lg flex items-start gap-3 bg-[#F9F8F4]">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#F4A321]">
+                    <MapPin className="w-5 h-5 text-white" />
                   </div>
-                  <h4
-                    className="text-sm font-semibold mb-2"
-                    style={{ color: '#2B1E17', fontWeight: 500 }}
-                  >
-                    Specialization
-                  </h4>
-                  <p
-                    className="text-xs leading-relaxed"
-                    style={{ color: '#6B5E55', fontWeight: 400, lineHeight: '1.4' }}
-                  >
-                    Monastic traditions & vernacular architecture
-                  </p>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#2B1E17]">
+                      Specialization
+                    </h4>
+                    <p className="text-xs text-[#6B5E55]">
+                      Monastic traditions & vernacular architecture
+                    </p>
+                  </div>
                 </div>
 
-                {/* Card 4 - Local Roots */}
-                <div
-                  className="p-5 rounded-lg"
-                  style={{ backgroundColor: '#F9F8F4' }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
-                    style={{ backgroundColor: '#F4A321' }}
-                  >
-                    <Users className="w-5 h-5 text-white" style={{ width: '20px', height: '20px' }} />
+                {/* Card 4 */}
+                <div className="p-4 rounded-lg flex items-start gap-3 bg-[#F9F8F4]">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#F4A321]">
+                    <Users className="w-5 h-5 text-white" />
                   </div>
-                  <h4
-                    className="text-sm font-semibold mb-2"
-                    style={{ color: '#2B1E17', fontWeight: 500 }}
-                  >
-                    Local Roots
-                  </h4>
-                  <p
-                    className="text-xs leading-relaxed"
-                    style={{ color: '#6B5E55', fontWeight: 400, lineHeight: '1.4' }}
-                  >
-                    Native Ladakhi from Staksmo village
-                  </p>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#2B1E17]">
+                      Local Roots
+                    </h4>
+                    <p className="text-xs text-[#6B5E55]">
+                      Native Ladakhi from Staksmo village
+                    </p>
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
