@@ -171,14 +171,14 @@ const Home = () => {
       </div>
 
       {/* Top Experiences Section */}
-      <section className="w-full bg-[#f5f5f5] py-16">
+      <section className="w-full bg-[#f5f5f5] py-16 ">
         <div className="max-w-6xl mx-auto px-6">
           {/* Section Header */}
-          <div className="text-center mb-10">
-            <h2 className="text-2xl font-semibold text-[#2b2b2b] mb-2">
+          <div className="text-center mb-2">
+            <h2 className="font-berlin text-3xl font text-[#2b2b2b] mb-2">
               Top Experiences
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="font-sans text-base tracking-tight font-normal text-[#4A5565]">
               Discover our most popular adventures
             </p>
           </div>
@@ -333,11 +333,11 @@ const Home = () => {
       <section className="w-full bg-[#f3f3f3] py-16">
         <div className="max-w-6xl mx-auto px-6">
           {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-2xl font-semibold text-[#2b2b2b] mb-2">
+          <div className="text-center mb-2">
+            <h2 className="font-berlin text-3xl font text-[#2b2b2b] mb-2">
               Upcoming Tours
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="font-sans text-base tracking-tight font-normal text-[#4A5565]">
               Join us on our adventures
             </p>
           </div>
