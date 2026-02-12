@@ -90,12 +90,12 @@ const Home = () => {
               }}
             >
               {repeatedSlides.map((slide, index) => (
-                <SwiperSlide key={index} className="w-1/4 lg:w-1/4 md:w-1/2 sm:w-full flex-shrink-0 flex justify-center">
+                <SwiperSlide key={index} className="w-[22%] lg:w-[22%] md:w-[45%] sm:w-full flex-shrink-0 flex justify-center">
                   <img
                     src={slide.image}
                     alt={slide.alt}
                     draggable={false}
-                    className="w-full h-full object-cover aspect-square will-change-transform [backface-visibility:hidden] [perspective:1000px]"
+                    className="w-full h-full object-cover aspect-[4/5] will-change-transform [backface-visibility:hidden] [perspective:1000px]"
                   />
                 </SwiperSlide>
               ))}
