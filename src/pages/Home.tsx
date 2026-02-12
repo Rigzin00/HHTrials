@@ -61,18 +61,17 @@ const Home = () => {
   return (
     <div className="flex-grow pt-[72px] min-h-screen bg-[#2B1E17]">
       {/* Hero Text */}
-    
-<div className="max-w-4xl mx-auto text-center pt-8 px-6 mb-8">
-  <p className="font-berlin text-[#F4A321] text-lg tracking-widest mb-4">
-    JULLEY !!
-  </p>
+      <div className="max-w-4xl mx-auto text-center pt-8 px-6 mb-8">
+        <p className="font-berlin text-[#F4A321] text-lg tracking-widest mb-4">
+          JULLEY !!
+        </p>
 
-  <h1 className="font-berlin text-white text-4xl md:text-5xl font-bold leading-tight mb-0">
-    AN INSIGHT INTO THE LEGACY
-    <br />
-    OF MOUNTAINS
-  </h1>
-</div>
+        <h1 className="font-berlin text-white text-4xl md:text-5xl font-bold leading-tight mb-0">
+          AN INSIGHT INTO THE LEGACY
+          <br />
+          OF MOUNTAINS
+        </h1>
+      </div>
 
       {/* Panorama Swiper */}
       <section className="w-full py-16 md:py-24 relative z-10">
@@ -80,7 +79,7 @@ const Home = () => {
           <div className="panorama-mask overflow-x-clip relative z-[1] will-change-transform translate-z-0">
             <Swiper
               slidesPerView="auto"
-              spaceBetween={20}
+              spaceBetween={40}
               allowTouchMove={false}
               loop={false}
               speed={0}
@@ -95,7 +94,7 @@ const Home = () => {
                     src={slide.image}
                     alt={slide.alt}
                     draggable={false}
-                    className="w-full h-full object-cover aspect-[4/5] will-change-transform [backface-visibility:hidden] [perspective:1000px]"
+                    className="w-full h-full object-cover aspect-[3/4] will-change-transform [backface-visibility:hidden] [perspective:1000px]"
                   />
                 </SwiperSlide>
               ))}
