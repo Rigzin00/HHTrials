@@ -75,26 +75,27 @@ const Home = () => {
 </div>
 
       {/* Panorama Swiper */}
-      <section className="panorama-section">
-        <div className="panorama-container">
-          <div className="panorama-swiper">
+      <section className="w-full py-16 md:py-24 relative z-10">
+        <div className="w-full relative">
+          <div className="panorama-mask overflow-x-clip relative z-[1] will-change-transform translate-z-0">
             <Swiper
               slidesPerView="auto"
               spaceBetween={20}
               allowTouchMove={false}
               loop={false}
               speed={0}
-              className="panorama-swiper-instance"
+              className="[&_.swiper-wrapper]:flex [&_.swiper-wrapper]:items-center [&_.swiper-wrapper]:justify-start [&_.swiper-wrapper]:!transition-timing-function-linear"
               onSwiper={(swiper) => {
                 swiperRef.current = swiper;
               }}
             >
               {repeatedSlides.map((slide, index) => (
-                <SwiperSlide key={index} className="panorama-slide">
+                <SwiperSlide key={index} className="w-1/4 lg:w-1/4 md:w-1/2 sm:w-full flex-shrink-0 flex justify-center">
                   <img
                     src={slide.image}
                     alt={slide.alt}
                     draggable={false}
+                    className="w-full h-full object-cover aspect-square will-change-transform [backface-visibility:hidden] [perspective:1000px]"
                   />
                 </SwiperSlide>
               ))}
