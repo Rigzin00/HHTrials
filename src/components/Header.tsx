@@ -105,16 +105,77 @@ export default function Header() {
           </button>
 
           {/* Auth Section */}
-          {isAuthenticated ? (
-            <div className="relative" ref={profileRef}>
-              <button
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="flex items-center gap-2 px-4 py-2 rounded transition-all duration-300"
-                style={{
-                  border: `1px solid ${primaryColor}`,
-                  color: primaryColor,
-                  backgroundColor: 'transparent',
-                }}
+         {isAuthenticated ? (
+          <div className="relative flex items-center gap-1">
+            
+            {/* Profile Button */}
+            <button
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+              className="flex flex-col items-center gap-1 px-3 py-2 rounded transition-all duration-300"
+              style={{ color: primaryColor, backgroundColor: 'transparent', border: 'none' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f0ede5'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={primaryColor}
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+              </svg>
+              <span style={{ fontSize: '11px', fontWeight: 500, color: primaryColor }}>Profile</span>
+            </button>
+
+            {/* Saved Button */}
+            <button
+              onClick={() => { /* your saved/bookmarks handler */ }}
+              className="flex flex-col items-center gap-1 px-3 py-2 rounded transition-all duration-300"
+              style={{ color: primaryColor, backgroundColor: 'transparent', border: 'none' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f0ede5'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={primaryColor}
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {/* Bookmark icon */}
+                <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
+              </svg>
+              <span style={{ fontSize: '11px', fontWeight: 500, color: primaryColor }}>Saved</span>
+            </button>
+
+            {/* Profile Dropdown Menu */}
+            {isProfileOpen && (
+              <div
+                className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg z-50 overflow-hidden"
+                style={{ backgroundColor: '#fff', border: `1px solid #e5e0d8`, top: '100%' }}
+              >
+                <div className="px-4 py-3" style={{ borderBottom: '1px solid #e5e0d8' }}>
+                  <p className="font-semibold text-sm" style={{ color: '#333' }}>
+                    {user?.fullName || 'User'}
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: '#888' }}>
+                    {user?.email}
+                  </p>
+                </div>
+                <button
+                onClick={handleSignOut}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors"
+                style={{ color: primaryColor }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#f0ede5';
                 }}
@@ -122,83 +183,35 @@ export default function Header() {
                   e.currentTarget.style.backgroundColor = 'transparent';
                 }}
               >
-                {user?.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={user.fullName || user.email}
-                    className="w-6 h-6 rounded-full object-cover"
-                  />
-                ) : (
-                  <div
-                    className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                    style={{ backgroundColor: primaryColor }}
-                  >
-                    {user?.fullName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
-                  </div>
-                )}
-                <span className="text-sm font-medium">
-                  {user?.fullName?.split(' ')[0] || user?.email?.split('@')[0]}
-                </span>
-                <ChevronDown className="w-4 h-4" />
+                <LogOut className="w-4 h-4" />
+                Sign Out
               </button>
-
-              {/* Dropdown Menu */}
-              {isProfileOpen && (
-                <div
-                  className="absolute right-0 mt-2 w-64 rounded-lg shadow-lg border z-50"
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    borderColor: '#E8E4D8',
-                  }}
-                >
-                  <div className="p-4 border-b" style={{ borderColor: '#E8E4D8' }}>
-                    <p className="text-sm font-medium" style={{ color: primaryColor }}>
-                      {user?.fullName || 'User'}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">{user?.email}</p>
-                  </div>
-                  <div className="p-2">
-                    <button
-                      onClick={handleSignOut}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded text-sm transition-colors"
-                      style={{ color: primaryColor }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f0ede5';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <button
-              onClick={() => setIsAuthModalOpen(true)}
-              className="px-5 py-3 rounded transition-all duration-300"
-              style={{
-                border: `1px solid ${primaryColor}`,
-                color: primaryColor,
-                fontWeight: 500,
-                fontSize: '14px',
-                backgroundColor: 'transparent',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = hoverColor;
-                e.currentTarget.style.borderColor = hoverColor;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = primaryColor;
-                e.currentTarget.style.borderColor = primaryColor;
-              }}
-            >
-              Sign In / Create Account
-            </button>
-          )}
+              </div>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsAuthModalOpen(true)}
+            className="px-5 py-3 rounded transition-all duration-300"
+            style={{
+              border: `1px solid ${primaryColor}`,
+              color: primaryColor,
+              fontWeight: 500,
+              fontSize: '14px',
+              backgroundColor: 'transparent',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = hoverColor;
+              e.currentTarget.style.borderColor = hoverColor;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = primaryColor;
+              e.currentTarget.style.borderColor = primaryColor;
+            }}
+          >
+            Sign In / Create Account
+          </button>
+        )}
         </div>
 
         {/* Mobile Menu Button */}
