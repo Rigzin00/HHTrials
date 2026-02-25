@@ -1,10 +1,12 @@
 import type { Tour } from "../../types/tour";
+import { useNavigate } from "react-router-dom";
 
 interface TourCardProps {
   tour: Tour;
 }
 
 const TourCard = ({ tour }: TourCardProps) => {
+  const navigate = useNavigate();
   return (
     <div className="w-[360px] m-3 bg-white rounded-xl shadow-md overflow-hidden">
 
@@ -64,7 +66,10 @@ const TourCard = ({ tour }: TourCardProps) => {
         </p>
 
         {/* button */}
-        <button className="w-full bg-[#2b140c] text-white py-3 rounded-lg text-sm font-medium">
+        <button
+          className="w-full bg-[#2b140c] text-white py-3 rounded-lg text-sm font-medium"
+          onClick={() => navigate(`/tours/${tour.id}`)}
+        >
           View Details →
         </button>
       </div>
