@@ -6,8 +6,10 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Tours from './pages/Tours';
+import TourDetail from './pages/TourDetail';
 import Blog from './pages/Blog';
 import GoogleCallback from './pages/GoogleCallback';
+import Admin from './pages/Admin';
 import AuthModal from './components/AuthModal'; 
 
 function App() {
@@ -25,8 +27,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/tours" element={<Tours />} />
+          <Route path="/tours/:id" element={<TourDetail />} />
           <Route path="/google/callback" element={<GoogleCallback />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/admin" element={<Admin />} />
 
         </Routes>
 

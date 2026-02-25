@@ -1,6 +1,26 @@
 import { useState } from "react";
 
-const FilterSidebar = () => {
+interface FilterSidebarProps {
+  selectedRegions: string[];
+  onRegionsChange: (regions: string[]) => void;
+  selectedTypes: string[];
+  onTypesChange: (types: string[]) => void;
+  selectedSeasons: string[];
+  onSeasonsChange: (seasons: string[]) => void;
+  duration: number;
+  onDurationChange: (duration: number) => void;
+}
+
+const FilterSidebar = ({
+  selectedRegions,
+  onRegionsChange,
+  selectedTypes,
+  onTypesChange,
+  selectedSeasons,
+  onSeasonsChange,
+  duration,
+  onDurationChange,
+}: FilterSidebarProps) => {
   const [showAllRegions, setShowAllRegions] = useState(false);
   const [showAllTypes, setShowAllTypes] = useState(false);
 
@@ -25,7 +45,30 @@ const FilterSidebar = () => {
 
   const visibleRegions = showAllRegions ? regions : regions.slice(0, 3);
   const visibleTypes = showAllTypes ? tourTypes : tourTypes.slice(0, 3);
-  const [duration, setDuration] = useState<number>(0);
+
+  const toggleRegion = (region: string) => {
+    if (selectedRegions.includes(region)) {
+      onRegionsChange(selectedRegions.filter((r) => r !== region));
+    } else {
+      onRegionsChange([...selectedRegions, region]);
+    }
+  };
+
+  const toggleType = (type: string) => {
+    if (selectedTypes.includes(type)) {
+      onTypesChange(selectedTypes.filter((t) => t !== type));
+    } else {
+      onTypesChange([...selectedTypes, type]);
+    }
+  };
+
+  const toggleSeason = (season: string) => {
+    if (selectedSeasons.includes(season)) {
+      onSeasonsChange(selectedSeasons.filter((s) => s !== season));
+    } else {
+      onSeasonsChange([...selectedSeasons, season]);
+    }
+  };
 
   return (
       <aside
@@ -68,7 +111,12 @@ const FilterSidebar = () => {
         <div className="space-y-2 text-sm">
           {visibleRegions.map((item) => (
             <label key={item} className="flex items-center gap-2">
-              <input type="checkbox" className="accent-black" />
+              <input
+                type="checkbox"
+                className="accent-black"
+                checked={selectedRegions.includes(item)}
+                onChange={() => toggleRegion(item)}
+              />
               {item}
             </label>
           ))}
@@ -91,7 +139,12 @@ const FilterSidebar = () => {
         <div className="space-y-2 text-sm">
           {visibleTypes.map((item) => (
             <label key={item} className="flex items-center gap-2">
-              <input type="checkbox" className="accent-black" />
+              <input
+                type="checkbox"
+                className="accent-black"
+                checked={selectedTypes.includes(item)}
+                onChange={() => toggleType(item)}
+              />
               {item}
             </label>
           ))}
@@ -125,7 +178,7 @@ const FilterSidebar = () => {
             min="0"
             max="14"
             value={duration}
-            onChange={(e) => setDuration(Number(e.target.value))}
+            onChange={(e) => onDurationChange(Number(e.target.value))}
             className="w-full"
           />
 
@@ -136,7 +189,7 @@ const FilterSidebar = () => {
 
         <div className="flex gap-2 mt-3 text-xs"><div className="flex gap-2 mt-3 text-xs">
         <button
-          onClick={() => setDuration(6)}
+          onClick={() => onDurationChange(6)}
           className={`border px-3 py-1 rounded ${
             duration < 7 ? "bg-black text-white" : ""
           }`}
@@ -145,7 +198,7 @@ const FilterSidebar = () => {
         </button>
 
         <button
-          onClick={() => setDuration(8)}
+          onClick={() => onDurationChange(8)}
           className={`border px-3 py-1 rounded ${
             duration >= 7 && duration <= 10 ? "bg-black text-white" : ""
           }`}
@@ -154,7 +207,7 @@ const FilterSidebar = () => {
         </button>
 
         <button
-          onClick={() => setDuration(11)}
+          onClick={() => onDurationChange(11)}
           className={`border px-3 py-1 rounded ${
             duration > 10 ? "bg-black text-white" : ""
           }`}
@@ -174,16 +227,36 @@ const FilterSidebar = () => {
 
         <div className="space-y-2 text-sm">
           <label className="flex items-center gap-2">
-            <input type="checkbox" /> Summer
+            <input
+              type="checkbox"
+              checked={selectedSeasons.includes("Summer")}
+              onChange={() => toggleSeason("Summer")}
+            />
+            Summer
           </label>
           <label className="flex items-center gap-2">
-            <input type="checkbox" /> Winter
+            <input
+              type="checkbox"
+              checked={selectedSeasons.includes("Winter")}
+              onChange={() => toggleSeason("Winter")}
+            />
+            Winter
           </label>
           <label className="flex items-center gap-2">
-            <input type="checkbox" /> Monsoon
+            <input
+              type="checkbox"
+              checked={selectedSeasons.includes("Monsoon")}
+              onChange={() => toggleSeason("Monsoon")}
+            />
+            Monsoon
           </label>
           <label className="flex items-center gap-2">
-            <input type="checkbox" /> Festival Time
+            <input
+              type="checkbox"
+              checked={selectedSeasons.includes("Festival")}
+              onChange={() => toggleSeason("Festival")}
+            />
+            Festival Time
           </label>
         </div>
       </div>

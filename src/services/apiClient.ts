@@ -32,6 +32,7 @@ class ApiClient {
 
     try {
       const url = `${this.baseURL}${endpoint}`;
+      console.log(`Making API request to: ${url}`);
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         ...(options.headers as Record<string, string>),
