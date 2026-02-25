@@ -1,4 +1,10 @@
-const TourCard = () => {
+import type { Tour } from "../../types/tour";
+
+interface TourCardProps {
+  tour: Tour;
+}
+
+const TourCard = ({ tour }: TourCardProps) => {
   return (
     <div className="w-[360px] m-3 bg-white rounded-xl shadow-md overflow-hidden">
 
@@ -10,14 +16,14 @@ const TourCard = () => {
 
         {/* image */}
         <img
-          src="/mountain.jpg"
-          alt="tour"
+          src={tour.photoUrl}
+          alt={tour.title}
           className="w-full h-full object-cover"
         />
 
         {/* recommended badge */}
         <span className="absolute top-3 left-3 bg-orange-400 text-white text-xs px-3 py-1 rounded-full">
-          Recommended
+          {tour.isCustom ? "Custom" : "Recommended"}
         </span>
 
         {/* bookmark */}
@@ -27,8 +33,10 @@ const TourCard = () => {
 
         {/* bottom info */}
         <div className="absolute bottom-2 left-3 right-3 flex justify-between text-white text-xs">
-          <span>📍 Ladakh</span>
-          <span>📅 9N / 10D</span>
+          <span>📍 {tour.region}</span>
+          <span>
+            📅 {tour.durationNights}N / {tour.durationDays}D
+          </span>
         </div>
       </div>
 
@@ -36,24 +44,23 @@ const TourCard = () => {
       <div className="p-5 space-y-3">
 
         <h3 className="text-lg font-semibold text-[#2b140c]">
-          Silk Route Trail & Tales
+          {tour.title}
         </h3>
 
         {/* tags */}
         <div className="flex gap-2 flex-wrap">
-          <span className="bg-orange-400 text-white text-xs px-3 py-1 rounded-full">
-            Cultural
-          </span>
-          <span className="bg-orange-400 text-white text-xs px-3 py-1 rounded-full">
-            Photography
-          </span>
-          <span className="bg-orange-400 text-white text-xs px-3 py-1 rounded-full">
-            Heritage
-          </span>
+          {tour.types.slice(0, 3).map((type) => (
+            <span
+              key={type}
+              className="bg-orange-400 text-white text-xs px-3 py-1 rounded-full"
+            >
+              {type}
+            </span>
+          ))}
         </div>
 
-        <p className="text-sm text-gray-500">
-          Journey through ancient trade routes with stunning mountain vistas
+        <p className="text-sm text-gray-500 line-clamp-2">
+          {tour.description || "Journey through the Himalayas with HHTrails."}
         </p>
 
         {/* button */}

@@ -8,6 +8,7 @@ import About from './pages/About';
 import Tours from './pages/Tours';
 import Blog from './pages/Blog';
 import GoogleCallback from './pages/GoogleCallback';
+import Admin from './pages/Admin';
 import AuthModal from './components/AuthModal'; 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/tours" element={<Tours />} />
           <Route path="/google/callback" element={<GoogleCallback />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/admin" element={<Admin />} />
 
         </Routes>
 
