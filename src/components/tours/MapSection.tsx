@@ -1,5 +1,3 @@
-"use client";
-
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 const containerStyle = {
@@ -21,14 +19,12 @@ const locations = [
 ];
 
 const MapSection = () => {
-  // useJsApiLoader is much more reliable in Next.js / React 18
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    // It is highly recommended to use environment variables for API keys
-    googleMapsApiKey: "AIzaSyCuiyYlvvy8DE2I5Fnd5_TYGb61U1CKlxU", 
+    // Call the key using Vite's specific syntax:
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "", 
   });
 
-  // Prevent rendering until the Google Maps API is ready
   if (!isLoaded) {
     return (
       <div className="w-full h-[350px] flex items-center justify-center bg-gray-100 rounded-lg">
@@ -49,8 +45,7 @@ const MapSection = () => {
             key={index}
             position={loc}
             icon={{
-              // Now that isLoaded is true, we can safely access the window.google object
-              path: window.google.maps.SymbolPath.CIRCLE,
+              path: (window as any).google.maps.SymbolPath.CIRCLE,
               fillColor: "#0f3d3e",
               fillOpacity: 1,
               strokeColor: "#ffffff",
