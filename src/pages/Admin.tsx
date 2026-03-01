@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import type React from 'react';
 import { toursService } from '../services/toursService';
+import { blogService } from '../services/blogService';
 import { storageService } from '../services/storageService';
 import type { Tour, TourDetails, ItineraryDay } from '../types/tour';
+import type { Blog } from '../types/blog';
 
 interface FormState {
   id?: string;
@@ -64,8 +66,40 @@ const emptyDetailsForm: DetailsFormState = {
 interface DayFormState { dayNumber: string; description: string; imageUrl: string; }
 const emptyDayForm: DayFormState = { dayNumber: '', description: '', imageUrl: '' };
 type AdminTab = 'basic' | 'details' | 'itinerary';
+type AdminSection = 'tours' | 'blogs';
 const splitLines = (s: string) => s.split('\n').map((l) => l.trim()).filter(Boolean);
 const joinLines = (arr: string[]) => arr.join('\n');
+
+// ─── Blog form ────────────────────────────────────────────────────────────────
+interface BlogFormState {
+  id?: string;
+  category: string;
+  coverImageUrl: string;
+  title: string;
+  shortDescription: string;
+  content: string;
+  authorName: string;
+  publishedDate: string;
+  readingTimeMinutes: string;
+}
+const emptyBlogForm: BlogFormState = {
+  category: '',
+  coverImageUrl: '',
+  title: '',
+  shortDescription: '',
+  content: '',
+  authorName: '',
+  publishedDate: '',
+  readingTimeMinutes: '',
+};
+
+const BLOG_CATEGORIES = [
+  'Travel Stories',
+  'Culture & Heritage',
+  'Tips & Guides',
+  'Sustainability & Volunteering',
+  'Photography',
+] as const;
 
 const AdminPage = () => {
   const [tours, setTours] = useState<Tour[]>([]);
@@ -96,6 +130,20 @@ const AdminPage = () => {
   const [daySubmitting, setDaySubmitting] = useState(false);
   const [itineraryError, setItineraryError] = useState<string | null>(null);
 
+  // ── Section switcher ──
+  const [section, setSection] = useState<AdminSection>('tours');
+
+  // ── Blogs ──
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [blogsLoading, setBlogsLoading] = useState(false);
+  const [blogForm, setBlogForm] = useState<BlogFormState>(emptyBlogForm);
+  const [blogSubmitting, setBlogSubmitting] = useState(false);
+  const [blogError, setBlogError] = useState<string | null>(null);
+  const [blogCoverFile, setBlogCoverFile] = useState<File | null>(null);
+  const [blogCoverPreview, setBlogCoverPreview] = useState<string | null>(null);
+
+  const isBlogEditing = Boolean(blogForm.id);
+
   const isEditing = Boolean(form.id);
 
   const loadTours = async () => {
@@ -112,7 +160,107 @@ const AdminPage = () => {
 
   useEffect(() => {
     void loadTours();
+    void loadBlogs();
   }, []);
+
+  // ── Blog handlers ──────────────────────────────────────────────────────────
+  const loadBlogs = async () => {
+    try {
+      setBlogsLoading(true);
+      const data = await blogService.getBlogs({ limit: 100 });
+      setBlogs(data.blogs);
+    } catch {
+      setBlogError('Failed to load blogs');
+    } finally {
+      setBlogsLoading(false);
+    }
+  };
+
+  const handleBlogInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setBlogForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBlogCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setBlogCoverFile(file);
+    setBlogCoverPreview(URL.createObjectURL(file));
+  };
+
+  const resetBlogForm = () => {
+    setBlogForm(emptyBlogForm);
+    setBlogCoverFile(null);
+    setBlogCoverPreview(null);
+    setBlogError(null);
+  };
+
+  const handleBlogEdit = (b: Blog) => {
+    setBlogForm({
+      id: b.id,
+      category: b.category,
+      coverImageUrl: b.coverImageUrl,
+      title: b.title,
+      shortDescription: b.shortDescription,
+      content: b.content,
+      authorName: b.authorName,
+      publishedDate: b.publishedDate,
+      readingTimeMinutes: String(b.readingTimeMinutes),
+    });
+    setBlogCoverPreview(b.coverImageUrl);
+    setBlogCoverFile(null);
+    setBlogError(null);
+  };
+
+  const handleBlogDelete = async (b: Blog) => {
+    if (!window.confirm(`Delete blog "${b.title}"?`)) return;
+    try {
+      setBlogSubmitting(true);
+      await blogService.deleteBlog(b.id);
+      await loadBlogs();
+      if (blogForm.id === b.id) resetBlogForm();
+    } catch {
+      setBlogError('Failed to delete blog');
+    } finally {
+      setBlogSubmitting(false);
+    }
+  };
+
+  const handleBlogSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBlogSubmitting(true);
+    setBlogError(null);
+    try {
+      let coverImageUrl = blogForm.coverImageUrl;
+      if (blogCoverFile) coverImageUrl = await storageService.uploadTourImage(blogCoverFile);
+
+      const payload = {
+        category: blogForm.category,
+        coverImageUrl,
+        title: blogForm.title,
+        shortDescription: blogForm.shortDescription,
+        content: blogForm.content,
+        authorName: blogForm.authorName,
+        publishedDate: blogForm.publishedDate || undefined,
+        readingTimeMinutes: Number(blogForm.readingTimeMinutes),
+      };
+
+      if (isBlogEditing && blogForm.id) {
+        await blogService.updateBlog(blogForm.id, payload);
+      } else {
+        await blogService.createBlog(payload);
+      }
+      await loadBlogs();
+      resetBlogForm();
+    } catch (err) {
+      console.error(err);
+      setBlogError('Failed to save blog');
+    } finally {
+      setBlogSubmitting(false);
+    }
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -383,10 +531,28 @@ const AdminPage = () => {
   return (
     <div className="flex-grow pt-[72px] min-h-screen bg-[#F7F6F2]">
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-semibold mb-6 text-[#2B1E17]">
-          Tours Admin
-        </h1>
+        <h1 className="text-3xl font-semibold mb-4 text-[#2B1E17]">Admin</h1>
 
+        {/* ── Section tabs ── */}
+        <div className="flex gap-1 mb-6 border-b border-gray-200">
+          {(['tours', 'blogs'] as AdminSection[]).map((s) => (
+            <button
+              key={s}
+              onClick={() => setSection(s)}
+              className={`px-5 py-2 text-sm font-medium capitalize transition-colors ${
+                section === s
+                  ? 'border-b-2 border-[#2B1E17] text-[#2B1E17]'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {/* ── Tours section ── */}
+        {section === 'tours' && (
+        <>
         {error && (
           <div className="mb-4 bg-red-50 border border-red-300 px-4 py-2 text-sm text-red-700">
             {error}
@@ -614,6 +780,87 @@ const AdminPage = () => {
             </div>
           </div>
         </div>
+        </> /* end tours section */
+        )}
+
+        {/* ── Blogs section ── */}
+        {section === 'blogs' && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+            {/* ── Blog list ── */}
+            <div className="bg-white rounded-lg shadow-sm border p-4 max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-medium text-[#2B1E17]">All Blogs</h2>
+                <button onClick={loadBlogs} disabled={blogsLoading} className="text-xs border rounded px-2 py-1 hover:bg-gray-50">
+                  {blogsLoading ? 'Refreshing…' : 'Refresh'}
+                </button>
+              </div>
+              {blogError && <p className="text-xs text-red-600 mb-2">{blogError}</p>}
+              {blogs.length === 0 && !blogsLoading && <p className="text-sm text-gray-400">No blogs yet.</p>}
+              {blogs.map((b) => (
+                <div key={b.id} className={`border rounded p-3 mb-3 ${blogForm.id === b.id ? 'border-[#2B1E17] bg-[#FAF8F5]' : ''}`}>
+                  <div className="flex items-start gap-3">
+                    {b.coverImageUrl && (
+                      <img src={b.coverImageUrl} alt={b.title} className="w-14 h-14 object-cover rounded flex-shrink-0" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-sm text-[#2B1E17] truncate">{b.title}</div>
+                      <div className="text-xs text-gray-500">{b.category} · {b.publishedDate} · {b.readingTimeMinutes} min</div>
+                      <div className="flex gap-2 mt-2">
+                        <button onClick={() => handleBlogEdit(b)} className="text-xs px-2 py-1 border rounded hover:bg-gray-50">Edit</button>
+                        <button onClick={() => handleBlogDelete(b)} disabled={blogSubmitting} className="text-xs px-2 py-1 border border-red-300 text-red-700 rounded hover:bg-red-50">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ── Blog form ── */}
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-medium text-[#2B1E17]">{isBlogEditing ? 'Edit Blog' : 'Create Blog'}</h2>
+                {isBlogEditing && <button onClick={resetBlogForm} className="text-xs text-gray-500 hover:underline">Cancel</button>}
+              </div>
+              {blogError && <p className="text-xs text-red-600 mb-2">{blogError}</p>}
+              <form onSubmit={handleBlogSubmit} className="space-y-3 text-sm">
+                <select name="category" value={blogForm.category} onChange={handleBlogInput} required className="w-full border p-2 rounded bg-white">
+                  <option value="">Select Category *</option>
+                  {BLOG_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+                </select>
+                <input name="title" value={blogForm.title} onChange={handleBlogInput} placeholder="Title *" required maxLength={300} className="w-full border p-2 rounded" />
+                <textarea name="shortDescription" value={blogForm.shortDescription} onChange={handleBlogInput} rows={2} placeholder="Short description *" required className="w-full border p-2 rounded" />
+                <textarea name="content" value={blogForm.content} onChange={handleBlogInput} rows={6} placeholder="Content * (HTML/Markdown/plain text)" required className="w-full border p-2 rounded font-mono text-xs" />
+                <input name="authorName" value={blogForm.authorName} onChange={handleBlogInput} placeholder="Author name *" required className="w-full border p-2 rounded" />
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Published date</label>
+                    <input type="date" name="publishedDate" value={blogForm.publishedDate} onChange={handleBlogInput} className="w-full border p-2 rounded" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Reading time (min) *</label>
+                    <input type="number" name="readingTimeMinutes" value={blogForm.readingTimeMinutes} onChange={handleBlogInput} min={1} placeholder="e.g. 6" required className="w-full border p-2 rounded" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Cover image</label>
+                  <input type="file" accept="image/*" onChange={handleBlogCoverChange} required={!isBlogEditing} />
+                  {blogCoverPreview && <img src={blogCoverPreview} alt="Preview" className="mt-2 w-24 h-24 object-cover rounded border" />}
+                  {isBlogEditing && !blogCoverFile && (
+                    <div className="mt-2">
+                      <label className="block text-xs text-gray-500 mb-1">Or update URL directly</label>
+                      <input name="coverImageUrl" type="url" value={blogForm.coverImageUrl} onChange={handleBlogInput} className="w-full border p-2 rounded" placeholder="https://…" />
+                    </div>
+                  )}
+                </div>
+                <button type="submit" disabled={blogSubmitting} className="px-4 py-2 bg-[#2B1E17] text-white rounded text-sm disabled:opacity-60">
+                  {blogSubmitting ? 'Saving…' : isBlogEditing ? 'Update Blog' : 'Create Blog'}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
