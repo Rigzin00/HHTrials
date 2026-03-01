@@ -983,6 +983,22 @@ const AccommodationSection = ({ accommodation }: any) => (
         </section>
 );
 
+/** Convert any YouTube URL to its embed equivalent.
+ * Handles: watch?v=, youtu.be/, shorts/, /embed/ (passthrough), and non-YT URLs. */
+function toEmbedUrl(url: string): string {
+  if (!url) return '';
+  // Already an embed URL — return as-is
+  if (url.includes('youtube.com/embed/')) return url;
+  // youtu.be/ID or youtube.com/shorts/ID
+  const shortMatch = url.match(/(?:youtu\.be\/|youtube\.com\/shorts\/)([\w-]{11})/);
+  if (shortMatch) return `https://www.youtube.com/embed/${shortMatch[1]}`;
+  // youtube.com/watch?v=ID
+  const watchMatch = url.match(/[?&]v=([\w-]{11})/);
+  if (watchMatch) return `https://www.youtube.com/embed/${watchMatch[1]}`;
+  // Not a YouTube URL — return unchanged (e.g. Vimeo or direct mp4)
+  return url;
+}
+
 /* ── 7. VIDEO ─────────────────────────────────────────── */
 const VideoSection = ({ videoSection }: any) => (
   <section
@@ -1016,7 +1032,7 @@ const VideoSection = ({ videoSection }: any) => (
     >
       {videoSection.videoUrl ? (
         <iframe
-          src={videoSection.videoUrl}
+          src={toEmbedUrl(videoSection.videoUrl)}
           title={videoSection.title || "Tour Video"}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
