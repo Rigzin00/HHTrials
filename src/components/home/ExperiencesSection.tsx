@@ -1,4 +1,11 @@
+import { useEffect, useState } from 'react';
 import ExperienceCard from './ExperienceCard';
+import { homeService } from '../../services/homeService';
+import type { HomeTour } from '../../types/home';
+
+interface ExperiencesSectionProps {
+  tours?: HomeTour[] | null;
+}
 
 const experiences = [
   {
@@ -24,7 +31,31 @@ const experiences = [
   },
 ];
 
-const ExperiencesSection = () => {
+const ExperiencesSection = ({ tours }: ExperiencesSectionProps) => {
+  const [recommended, setRecommended] = useState<HomeTour[] | null>(null);
+
+  useEffect(() => {
+    if (!import.meta.env.VITE_API_BASE_URL) return;
+    homeService.recommended()
+      .then(setRecommended)
+      .catch((err) => console.error('Failed to load recommended tours', err));
+  }, []);
+
+  // tours prop = active search results (null means no search yet)
+  const toMap = (t: HomeTour) => ({
+    id: t.id,
+    image: t.photoUrl || 'assets/ImageWithFallback.svg',
+    title: t.title,
+    duration: `${t.durationNights} Nights/${t.durationDays} Days`,
+    groupSize: t.region,
+  });
+
+  const displayCards = tours !== null && tours !== undefined
+    ? tours.map(toMap)
+    : recommended
+      ? recommended.map(toMap)
+      : experiences;
+
   return (
     <section className="w-full bg-[#f5f5f5] py-16">
       <div className="max-w-6xl mx-auto px-6">
@@ -39,8 +70,11 @@ const ExperiencesSection = () => {
         </div>
 
         {/* Card Grid */}
+        {displayCards.length === 0 ? (
+          <p className="text-center text-sm text-gray-400 py-12">No tours found for your search.</p>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {experiences.map((experience) => (
+          {displayCards.map((experience) => (
             <ExperienceCard
               key={experience.id}
               image={experience.image}
@@ -49,6 +83,8 @@ const ExperiencesSection = () => {
               groupSize={experience.groupSize}
             />
           ))}
+        </div>
+        )}
         </div>
 
         {/* Bottom Controls */}
@@ -72,7 +108,6 @@ const ExperiencesSection = () => {
             See All Tours →
           </button>
         </div>
-      </div>
     </section>
   );
 };
