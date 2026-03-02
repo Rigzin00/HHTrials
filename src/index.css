@@ -38,3 +38,30 @@
     -webkit-mask-position: center;
   }
 }
+
+/* ── Mobile responsive (≤640px) ── */
+@media (max-width: 640px) {
+  .hero-title       { font-size: 1.4rem !important; }
+  .timeline-desktop { display: none !important; }
+  .timeline-mobile  { display: flex !important; }
+  .itin-btn-row     { flex-wrap: wrap !important; justify-content: center !important; }
+  .highlights-grid  { grid-template-columns: 1fr !important; }
+  .inc-exc-grid     { grid-template-columns: 1fr !important; }
+  .accom-grid       { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .video-grid       { grid-template-columns: 1fr !important; gap: 28px 0 !important; }
+  .video-embed      { order: 1; }
+  .video-text       { order: 2; }
+  .map-inner-card   { padding: 20px 14px 24px !important; }
+  .map-iframe-wrap  { height: 260px !important; }
+  .review-card      { padding: 16px 14px !important; }
+  .review-header    { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .fixed-cta-bar    { padding: 10px 14px !important; }
+  .cta-subtitle     { display: none !important; }
+  .cta-btn          { font-size: 0.78rem !important; padding: 7px 12px !important; }
+}
+
+/* ── Desktop (≥641px) ── */
+@media (min-width: 641px) {
+  .timeline-desktop { display: block !important; }
+  .timeline-mobile  { display: none !important; }
+}
