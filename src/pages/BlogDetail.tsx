@@ -28,16 +28,23 @@ export default function BlogDetail() {
   if (loading) {
     return (
       <div className="flex-grow pt-[72px] min-h-screen bg-[#F7F6F2] flex items-center justify-center">
-        <p className="text-gray-400 text-sm">Loading article…</p>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-[#F4A62A] border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-400 text-sm tracking-wide">Loading article…</p>
+        </div>
       </div>
     );
   }
 
   if (error || !blog) {
     return (
-      <div className="flex-grow pt-[72px] min-h-screen bg-[#F7F6F2] flex flex-col items-center justify-center gap-4">
-        <p className="text-gray-500">{error ?? 'Article not found.'}</p>
-        <button onClick={() => navigate('/blog')} className="text-sm text-[#2b1b14] hover:underline">
+      <div className="flex-grow pt-[72px] min-h-screen bg-[#F7F6F2] flex flex-col items-center justify-center gap-5 px-6 text-center">
+        <div className="w-14 h-14 rounded-full bg-[#F4A62A]/10 flex items-center justify-center text-2xl">📄</div>
+        <p className="text-gray-600 font-medium">{error ?? 'Article not found.'}</p>
+        <button
+          onClick={() => navigate('/blog')}
+          className="inline-flex items-center gap-2 text-sm font-medium text-white bg-[#2b1b14] hover:bg-[#3d2a1e] px-5 py-2.5 rounded-full transition-colors"
+        >
           ← Back to Blog
         </button>
       </div>
@@ -45,52 +52,84 @@ export default function BlogDetail() {
   }
 
   return (
-    <div className="flex-grow pt-[72px] min-h-screen bg-white">
-      {/* Hero image */}
+    <div className="flex-grow pt-[72px] min-h-screen bg-white w-full overflow-x-hidden">
+
+      {/* ── Hero ── */}
       {blog.coverImageUrl && (
-        <div className="w-full h-48 sm:h-[420px] overflow-hidden">
-          <img src={blog.coverImageUrl} alt={blog.title} className="w-full h-full object-cover" />
+        <div className="w-screen relative left-1/2 -translate-x-1/2 h-56 sm:h-80 md:h-[460px] overflow-hidden">
+          <img
+            src={blog.coverImageUrl}
+            alt={blog.title}
+            className="w-full h-full object-cover"
+          />
         </div>
       )}
 
-      <div className="max-w-[720px] mx-auto px-6 py-12">
-        {/* Back */}
+      {/* ── Article shell ── */}
+      <div className="max-w-[740px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+
+        {/* Back link */}
         <button
           onClick={() => navigate('/blog')}
-          className="text-sm text-gray-500 hover:text-[#2b1b14] mb-8 flex items-center gap-1"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-[#2b1b14] uppercase tracking-widest transition-colors mb-10"
         >
           ← Back to Blog
         </button>
 
         {/* Category badge */}
-        <span className="inline-block bg-[#F4A62A] text-white text-xs px-4 py-1.5 rounded-full font-medium mb-4">
-          {blog.category}
-        </span>
+        <div className="mb-4">
+          <span className="inline-block bg-[#F4A62A] text-white text-[11px] font-semibold px-3.5 py-1 rounded-full uppercase tracking-wider">
+            {blog.category}
+          </span>
+        </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-[#2b2b2b] leading-tight mb-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1a1a1a] leading-snug tracking-tight mb-5">
           {blog.title}
         </h1>
 
-        {/* Meta */}
-        <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-8 pb-6 border-b border-gray-200">
-          <span className="font-medium text-[#2b1b14]">{blog.authorName}</span>
-          <span>·</span>
+        {/* Meta row */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-gray-500 mb-8 pb-7 border-b border-gray-100">
+          <span className="font-semibold text-[#2b1b14]">{blog.authorName}</span>
+          <span className="text-gray-300">·</span>
           <span>{blog.publishedDate}</span>
-          <span>·</span>
+          <span className="text-gray-300">·</span>
           <span>{blog.readingTimeMinutes} min read</span>
         </div>
 
-        {/* Short description */}
-        <p className="text-base text-gray-600 leading-relaxed mb-8 italic border-l-4 border-[#F4A62A] pl-4">
-          {blog.shortDescription}
-        </p>
+        {/* Pull quote / short description */}
+        <blockquote className="relative pl-5 mb-10 border-l-[3px] border-[#F4A62A]">
+          <p className="text-base sm:text-lg text-gray-500 leading-relaxed italic">
+            {blog.shortDescription}
+          </p>
+        </blockquote>
 
-        {/* Content */}
+        {/* Body content */}
         <div
-          className="prose prose-sm max-w-none text-gray-700 leading-relaxed"
+          className="
+            prose prose-base sm:prose-lg max-w-none
+            prose-headings:font-bold prose-headings:text-[#1a1a1a] prose-headings:tracking-tight
+            prose-p:text-gray-700 prose-p:leading-relaxed
+            prose-a:text-[#F4A62A] prose-a:no-underline hover:prose-a:underline
+            prose-strong:text-[#2b1b14]
+            prose-blockquote:border-l-[#F4A62A] prose-blockquote:text-gray-500 prose-blockquote:not-italic
+            prose-img:rounded-xl prose-img:shadow-md
+            prose-hr:border-gray-100
+            prose-code:text-[#2b1b14] prose-code:bg-[#FBF7F4] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-[''] prose-code:after:content-['']
+          "
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
+
+        {/* Footer back link */}
+        <div className="mt-14 pt-8 border-t border-gray-100">
+          <button
+            onClick={() => navigate('/blog')}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#2b1b14] hover:text-[#F4A62A] transition-colors group"
+          >
+            <span className="group-hover:-translate-x-1 transition-transform">←</span>
+            Back to all articles
+          </button>
+        </div>
       </div>
     </div>
   );
