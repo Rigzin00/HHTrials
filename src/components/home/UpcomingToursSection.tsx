@@ -1,5 +1,9 @@
+import { useEffect, useState } from 'react';
 import TourCard from './TourCard';
 import { Compass, BookOpen, Gift, Heart, Shield, Award } from 'lucide-react';
+import { homeService } from '../../services/homeService';
+import type { HomeTour } from '../../types/home';
+
 const upcomingTours = [
   {
     id: 1,
@@ -56,6 +60,25 @@ const features = [
   }
 ];
 const UpcomingToursSection = () => {
+  const [apiTours, setApiTours] = useState<HomeTour[] | null>(null);
+
+  useEffect(() => {
+    if (!import.meta.env.VITE_API_BASE_URL) return;
+    homeService.recommended()
+      .then(setApiTours)
+      .catch((err) => console.error('Failed to load recommended tours', err));
+  }, []);
+
+  const displayTours = apiTours
+    ? apiTours.map((t) => ({
+        id: t.id,
+        image: t.photoUrl || 'assets/ImageWithFallback (3).svg',
+        title: t.title,
+        duration: `${t.durationNights} Nights/${t.durationDays} Days`,
+        location: t.region,
+      }))
+    : upcomingTours;
+
   return (
      <>
     <section className="w-full bg-[#f3f3f3] py-16">
@@ -72,7 +95,7 @@ const UpcomingToursSection = () => {
 
         {/* Card Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {upcomingTours.map((tour) => (
+          {displayTours.map((tour) => (
             <TourCard
               key={tour.id}
               image={tour.image}

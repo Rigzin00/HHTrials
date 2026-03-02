@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   HeroSection,
   PanoramaSwiper,
@@ -5,14 +6,20 @@ import {
   ExperiencesSection,
   UpcomingToursSection,
 } from '../components/home';
+import type { HomeTour } from '../types/home';
 
 const Home = () => {
+  const [searchResults, setSearchResults] = useState<HomeTour[] | null>(null);
+
   return (
     <div className="flex-grow pt-[72px] min-h-screen bg-[#2B1E17]">
       <HeroSection />
       <PanoramaSwiper />
-      <SearchBar />
-      <ExperiencesSection />
+      <SearchBar
+        onSearch={(tours) => setSearchResults(tours)}
+        onClear={() => setSearchResults(null)}
+      />
+      <ExperiencesSection tours={searchResults} />
       <UpcomingToursSection />
     </div>
   );
