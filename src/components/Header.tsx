@@ -52,7 +52,8 @@ export default function Header() {
       className="fixed top-0 w-full z-50"
       style={{ backgroundColor, fontFamily: 'Inter, sans-serif' }}
     >
-      <div className="h-[72px] flex items-center justify-between px-16 max-w-screen-2xl mx-auto w-full">
+      {/* Changed px-16 to responsive padding: px-4 on mobile, px-8 on tablet, px-16 on desktop */}
+      <div className="h-[72px] flex items-center justify-between px-4 sm:px-8 lg:px-16 max-w-screen-2xl mx-auto w-full">
         {/* Logo Section */}
         <Link to="/" className="flex-shrink-0">
           <img
@@ -232,13 +233,13 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — changed px-16 to px-4 sm:px-6 for proper mobile spacing */}
       {isMenuOpen && (
         <div
           className="md:hidden border-t"
           style={{ borderColor: '#E8E4D8', backgroundColor }}
         >
-          <nav className="flex flex-col px-16 py-4 gap-4">
+          <nav className="flex flex-col px-4 sm:px-6 py-4 gap-4">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -255,7 +256,7 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="flex flex-col gap-3 px-16 py-4 border-t" style={{ borderColor: '#E8E4D8' }}>
+          <div className="flex flex-col gap-3 px-4 sm:px-6 py-4 border-t" style={{ borderColor: '#E8E4D8' }}>
             <button
               className="flex items-center justify-center gap-2 px-5 py-3 rounded transition-all duration-300 w-full"
               style={{
