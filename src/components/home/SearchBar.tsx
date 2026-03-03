@@ -1,4 +1,35 @@
-const SearchBar = () => {
+import { useState } from 'react';
+import { homeService } from '../../services/homeService';
+import type { HomeTour } from '../../types/home';
+
+
+interface SearchBarProps {
+  onSearch: (tours: HomeTour[]) => void;
+  onClear: () => void;
+}
+
+
+const SearchBar = ({ onSearch, onClear }: SearchBarProps) => {
+  const [destination, setDestination] = useState('');
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = async () => {
+    if (!import.meta.env.VITE_API_BASE_URL) return;
+    if (!destination || !from || !to) return;
+    try {
+      setLoading(true);
+      const result = await homeService.search(from, to, destination);
+      onSearch(result.tours);
+    } catch (err) {
+      console.error('Search failed', err);
+      onSearch([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="mb-6 px-2 mt-3 md:mt-8">
       <div className="max-w-4xl mx-auto bg-[#6A5F56] rounded-lg shadow-md p-2 md:p-5">
@@ -14,11 +45,17 @@ const SearchBar = () => {
               <p className="text-[8px] md:text-[10px] text-gray-400 leading-none">
                 Destination
               </p>
-              <input
-                type="text"
-                placeholder="Search tours..."
-                className="w-full outline-none text-[10px] md:text-xs text-gray-700 placeholder:text-gray-400"
-              />
+              <select
+                value={destination}
+                onChange={(e) => { setDestination(e.target.value); if (!e.target.value) onClear(); }}
+                className="w-full outline-none text-xs text-gray-700 bg-transparent appearance-none cursor-pointer"
+              >
+                <option value="">Select destination...</option>
+                <option value="Ladakh">Ladakh</option>
+                <option value="Spiti">Spiti</option>
+                <option value="Kashmir">Kashmir</option>
+                <option value="Himachal">Himachal</option>
+              </select>
             </div>
           </div>
 
@@ -34,8 +71,10 @@ const SearchBar = () => {
               <input
                 type="text"
                 placeholder="27 - Nov - 2025"
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => !e.target.value && (e.target.type = "text")}
+               value={from}
+                onFocus={(e) => (e.target.type = 'date')}
+                onBlur={(e) => !e.target.value && (e.target.type = 'text')}
+                onChange={(e) => setFrom(e.target.value)}
                 className="w-full outline-none text-[10px] md:text-xs text-gray-700 placeholder:text-gray-400"
               />
             </div>
@@ -53,19 +92,24 @@ const SearchBar = () => {
               <input
                 type="text"
                 placeholder="30 - Nov - 2025"
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => !e.target.value && (e.target.type = "text")}
+                value={to}
+                onFocus={(e) => (e.target.type = 'date')}
+                onBlur={(e) => !e.target.value && (e.target.type = 'text')}
+                onChange={(e) => setTo(e.target.value)}
                 className="w-full outline-none text-[10px] md:text-xs text-gray-700 placeholder:text-gray-400"
               />
             </div>
           </div>
 
           {/* Search Button */}
-          <button className="bg-[#F4A321] hover:bg-[#E09419] text-[#1F1F1F] text-[10px] md:text-sm font-medium px-2 py-1.5 md:px-4 md:py-3 rounded-md flex items-center justify-center gap-1 transition-all duration-300">
+          <button 
+           onClick={handleSearch}
+            disabled={loading}
+            className="bg-[#F4A321] hover:bg-[#E09419] text-[#1F1F1F] text-[10px] md:text-sm font-medium px-2 py-1.5 md:px-4 md:py-3 rounded-md flex items-center justify-center gap-1 transition-all duration-300">
             <svg className="w-3.5 h-3.5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            Search
+            {loading ? 'Searching...' : 'Search'}
           </button>
 
         </div>
