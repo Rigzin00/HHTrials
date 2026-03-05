@@ -35,14 +35,14 @@
 - [ ] Explore Our Tours: redirect to Tours Page
 
 ### Blog Page
-- [ ] Heading Font
+- [X] Heading Font
 - [ ] Travellers Library Integration
 - [ ] Latest Articles addition
-- [ ] Filters Mobile Responsiveness
+- [X] Filters Mobile Responsiveness
 
 ### Blog Detail Page
-- [ ] Remove Image for Professionalism
-- [ ] Content -> text-justify
+- [X] Remove Image for Professionalism
+- [X] Content -> text-justify
 - [ ] Content subheadings*
 
 ### Footer
