@@ -1,4 +1,4 @@
-import { Award, Briefcase, Users, MapPin, Heart, Leaf, Mountain, BookOpen, Building2, Clock,  UserCheck,Compass} from 'lucide-react';
+import { Award, Eye, Users, MapPin, Heart, Leaf, Mountain, BookOpen, Building2, Clock,  UserCheck,Compass} from 'lucide-react';
 
 export default function About() {
   const timelineSteps = [
@@ -80,42 +80,52 @@ export default function About() {
   return (
     <div className="bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
       {/* Hero Section */}
-      <section
-        className="relative flex items-center justify-center overflow-hidden"
-        style={{
-          backgroundImage: 'url("/Container4.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          marginTop: '72px',
-          minHeight: '200px',
-          padding: '48px 24px',
-        }}
-      >
-        <div className="absolute inset-0 bg-black/35"></div>
-        <div className="relative z-10 text-center w-full" style={{ maxWidth: '640px', padding: '0 16px' }}>
-          <h1
+                <section
+            className="relative flex items-center justify-center overflow-hidden"
             style={{
-              color: '#1F1F1F',
-              fontWeight: 400,
-              fontSize: 'clamp(28px, 5vw, 36px)',
-              marginBottom: '16px',
-              lineHeight: 1.2,
+              backgroundImage: 'url("/Container4.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              marginTop: '72px',
+              minHeight: 'clamp(260px, 40vw, 330px)',
+              padding: 'clamp(32px, 6vw, 48px) clamp(16px, 5vw, 24px)',
             }}
           >
-            About Us
-          </h1>
-          <p
-            style={{
-              color: '#FFFDF8',
-              fontWeight: 400,
-              fontSize: '14px',
-              lineHeight: '1.6',
-            }}
-          >
-            Heritage Himalaya Trails is more than a travel organization as we are storytellers, cultural ambassadors, and guardians of tradition, dedicated to creating meaningful journeys through the Himalayan heartland.
-          </p>
-        </div>
-      </section>
+            <div className="absolute inset-0 bg-black/25"></div>
+            <div
+              className="relative z-10 text-center w-full mx-auto"
+              style={{
+                maxWidth: '760px',
+                padding: '0 clamp(12px, 4vw, 14px)',
+              }}
+            >
+              <h1
+                style={{
+                  color: '#281910',
+                  fontWeight: 300,
+                  fontSize: 'clamp(24px, 6vw, 46px)',
+                  marginBottom: 'clamp(10px, 2vw, 16px)',
+                  lineHeight: 1.2,
+                  fontFamily: 'Berlin Sans FB',
+                }}
+              >
+                About Us
+              </h1>
+              <p
+                style={{
+                  color: '#FFFDF8',
+                  fontWeight: 200,
+                  fontSize: 'clamp(12px, 2.5vw, 14px)',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.09em',
+                  maxWidth: '600px',
+                  margin: '0 auto',
+                }}
+              >
+                Heritage Himalaya Trails is more than a travel organization as we are storytellers, cultural ambassadors, and guardians of tradition, dedicated to creating meaningful journeys through the Himalayan heartland.
+              </p>
+            </div>
+          </section>
 
       {/* Meet Our Founder Section */}
       <section className="bg-white" style={{ paddingTop: '50px', paddingBottom: '80px' }}>
@@ -125,17 +135,17 @@ export default function About() {
             <h2
               style={{
                 color: '#2B1E17',
-                fontWeight: 600,
+                fontWeight: 300,
                 fontSize: 'clamp(24px, 4vw, 36px)',
-                marginBottom: '12px',
+                 fontFamily: "Berlin Sans FB",
               }}
             >
               Meet Our Founder
             </h2>
-            <h3 className="text-lg mb-2" style={{ color: '#2B1E17', fontWeight: 500 }}>
+            <h3 className="text-lg mb-1" style={{ color: '#2B1E17', fontWeight: 500 }}>
               Dr. Sonam Wangchok
             </h3>
-            <p className="text-sm" style={{ color: '#F4A321', fontWeight: 500 }}>
+            <p className="text-sm" style={{ color: '#F9AA29', fontWeight: 200 }}>
               Cultural Heritage Expert &amp; Guide
             </p>
           </div>
@@ -145,7 +155,7 @@ export default function About() {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '28px',
+              gap: '20px',
               padding: '0 8px',
             }}
           >
@@ -208,7 +218,7 @@ export default function About() {
                     color: '#6B5E55',
                     fontWeight: 400,
                     fontSize: '14px',
-                    lineHeight: '1.6',
+                    lineHeight: '1.4',
                     textAlign: 'justify',
                     margin: 0,
                   }}
@@ -228,44 +238,44 @@ export default function About() {
                   {/* Card 1 */}
                   <div style={{ padding: '16px', borderRadius: '8px', display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: '#F9F8F4' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F4A321', flexShrink: 0 }}>
-                      <Award style={{ width: '20px', height: '20px', color: 'white' }} />
+                      <Mountain style={{ width: '20px', height: '20px', color: 'white' }} />
                     </div>
                     <div>
-                      <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#2B1E17', margin: '0 0 4px 0' }}>Heritage Expert</h4>
-                      <p style={{ fontSize: '12px', color: '#6B5E55', margin: 0 }}>UNESCO &amp; government preservation projects</p>
+                      <h4 style={{ fontSize: '14px', fontWeight: 400, color: '#2B1E17', margin: '0 0 4px 0' }}>Heritage Expert</h4>
+                      <p style={{ fontSize: '16px', color: '#4A5565', margin: 0 }}>UNESCO &amp; government preservation projects</p>
                     </div>
                   </div>
 
                   {/* Card 2 */}
                   <div style={{ padding: '16px', borderRadius: '8px', display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: '#F9F8F4' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F4A321', flexShrink: 0 }}>
-                      <Briefcase style={{ width: '20px', height: '20px', color: 'white' }} />
+                      <Award style={{ width: '20px', height: '20px', color: 'white' }} />
                     </div>
                     <div>
-                      <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#2B1E17', margin: '0 0 4px 0' }}>Academic Background</h4>
-                      <p style={{ fontSize: '12px', color: '#6B5E55', margin: 0 }}>Cultural anthropology &amp; heritage management</p>
+                      <h4 style={{ fontSize: '14px', fontWeight: 500, color: '#2B1E17', margin: '0 0 4px 0' }}>Academic Background</h4>
+                      <p style={{ fontSize: '16px', color: '#4A5565', margin: 0 }}>Cultural anthropology &amp; heritage management</p>
                     </div>
                   </div>
 
                   {/* Card 3 */}
                   <div style={{ padding: '16px', borderRadius: '8px', display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: '#F9F8F4' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F4A321', flexShrink: 0 }}>
-                      <MapPin style={{ width: '20px', height: '20px', color: 'white' }} />
+                      <Eye style={{ width: '20px', height: '20px', color: 'white' }} />
                     </div>
                     <div>
-                      <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#2B1E17', margin: '0 0 4px 0' }}>Specialization</h4>
-                      <p style={{ fontSize: '12px', color: '#6B5E55', margin: 0 }}>Monastic traditions &amp; vernacular architecture</p>
+                      <h4 style={{ fontSize: '14px', fontWeight: 500, color: '#2B1E17', margin: '0 0 4px 0' }}>Specialization</h4>
+                      <p style={{ fontSize: '16px', color: '#4A5565', margin: 0 }}>Monastic traditions &amp; vernacular architecture</p>
                     </div>
                   </div>
 
                   {/* Card 4 */}
                   <div style={{ padding: '16px', borderRadius: '8px', display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: '#F9F8F4' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F4A321', flexShrink: 0 }}>
-                      <Users style={{ width: '20px', height: '20px', color: 'white' }} />
+                      <Heart style={{ width: '20px', height: '20px', color: 'white' }} />
                     </div>
                     <div>
-                      <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#2B1E17', margin: '0 0 4px 0' }}>Local Roots</h4>
-                      <p style={{ fontSize: '12px', color: '#6B5E55', margin: 0 }}>Native Ladakhi from Staksmo village</p>
+                      <h4 style={{ fontSize: '14px', fontWeight: 500, color: '#2B1E17', margin: '0 0 4px 0' }}>Local Roots</h4>
+                      <p style={{ fontSize: '16px', color: '#4A5565', margin: 0 }}>Native Ladakhi from Staksmo village</p>
                     </div>
                   </div>
                 </div>
@@ -304,7 +314,7 @@ export default function About() {
             <blockquote style={{ margin: '0 0 24px 0' }}>
               <p
                 style={{
-                  color: '#FFFFFF',
+                  color: '#F3F4F1',
                   fontSize: 'clamp(13px, 2vw, 16px)',
                   fontWeight: 400,
                   lineHeight: '1.5',
@@ -335,8 +345,8 @@ export default function About() {
       {/* Values Cards Section */}
       <section
         style={{
-          background: 'linear-gradient(135deg, #1A0F0A 0%, #2B1E17 100%)',
-          paddingTop: '80px',
+          background: '#281910',
+          paddingTop: '76px',
           paddingBottom: '80px',
         }}
       >
@@ -356,7 +366,7 @@ export default function About() {
                 background: 'rgba(255, 255, 255, 0.08)',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '16px',
-                padding: '32px',
+                padding: '50px',
                 backdropFilter: 'blur(10px)',
               }}
             >
@@ -368,16 +378,16 @@ export default function About() {
                   <Heart className="w-7 h-7 text-white" />
                 </div>
                 <h3
-                  className="text-lg mb-3"
-                  style={{ color: '#FFFFFF', fontWeight: 600 }}
+                  className="text-sm mb-5"
+                  style={{ color: '#FFFFFF', fontSize: '24px', fontWeight: 300 }}
                 >
                   Culturally Authentic
                 </h3>
                 <p
                   className="text-sm leading-relaxed"
-                  style={{ color: '#D6CFC8', fontWeight: 400, lineHeight: '1.6' }}
+                  style={{ color: '#F3F4F1', fontWeight: 100, lineHeight: '1.6' }}
                 >
-                  We approach every journey with deep respect for local traditions, communities, and sacred spaces. Our commitment runs beyond tourism—we're cultural ambassadors who honor the heritage we share.
+                 We approach every journey with deep respect for local traditions, communities, and sacred spaces.
                 </p>
               </div>
             </div>
@@ -389,40 +399,7 @@ export default function About() {
                 background: 'rgba(255, 255, 255, 0.08)',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
                 borderRadius: '16px',
-                padding: '32px',
-                backdropFilter: 'blur(10px)',
-              }}
-            >
-              <div className="flex flex-col items-center text-center">
-                <div
-                  className="w-14 h-14 rounded-full flex items-center justify-center mb-6"
-                  style={{ backgroundColor: '#F4A321' }}
-                >
-                  <Leaf className="w-7 h-7 text-white" />
-                </div>
-                <h3
-                  className="text-lg mb-3"
-                  style={{ color: '#FFFFFF', fontWeight: 600 }}
-                >
-                  Sustainable Travel
-                </h3>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: '#D6CFC8', fontWeight: 400, lineHeight: '1.6' }}
-                >
-                  Our commitment to responsible tourism ensures minimal environmental impact and maximum community benefit. We believe that the most meaningful journeys leave the landscape and communities better than we found them.
-                </p>
-              </div>
-            </div>
-
-            {/* Card 3 - Sustainably Responsible */}
-            <div
-              className="transition-all duration-300 ease-out hover:shadow-2xl hover:translate-y-[-8px]"
-              style={{
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                borderRadius: '16px',
-                padding: '32px',
+                padding: '50px',
                 backdropFilter: 'blur(10px)',
               }}
             >
@@ -434,16 +411,49 @@ export default function About() {
                   <Mountain className="w-7 h-7 text-white" />
                 </div>
                 <h3
-                  className="text-lg mb-3"
-                  style={{ color: '#FFFFFF', fontWeight: 600 }}
+                  className="text-sm mb-5"
+                  style={{  color: '#FFFFFF', fontSize: '24px', fontWeight: 300  }}
+                >
+                  Sustainable Travel
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: '#F3F4F1', fontWeight: 100, lineHeight: '1.6'  }}
+                >
+                  Our commitment to responsible tourism ensures minimal environmental impact and maximum community benefit.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3 - Sustainably Responsible */}
+            <div
+              className="transition-all duration-300 ease-out hover:shadow-2xl hover:translate-y-[-8px]"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                borderRadius: '16px',
+                padding: '35px',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <div className="flex flex-col items-center text-center">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center mb-6"
+                  style={{ backgroundColor: '#F4A321' }}
+                >
+                  <Leaf className="w-7 h-7 text-white" />
+                </div>
+                <h3
+                  className="text-lg mb-5"
+                  style={{ color: '#FFFFFF', fontSize: '23px', fontWeight: 200  }}
                 >
                   Sustainably Responsible
                 </h3>
                 <p
                   className="text-sm leading-relaxed"
-                  style={{ color: '#D6CFC8', fontWeight: 400, lineHeight: '1.6' }}
+                  style={{ color: '#F3F4F1', fontWeight: 200, lineHeight: '1.6' }}
                 >
-                  We are committed to preserving pristine mountain environments and supporting local communities. Every journey contributes to conservation efforts and sustainable livelihoods in the regions we explore.
+                 Committed to preserving pristine environments and supporting mountain communities.
                 </p>
               </div>
             </div>
