@@ -1,6 +1,16 @@
-import { Award, Eye, Users, MapPin, Heart, Leaf, Mountain, BookOpen, Building2, Clock,  UserCheck,Compass} from 'lucide-react';
+import { Award, Eye, Users, MapPin, Heart, Leaf, Mountain, BookOpen, Building2, Clock,  UserCheck,Compass,Send} from 'lucide-react';
 
 export default function About() {
+ 
+
+  //whatsapp redirect function
+  const handleWhatsAppEnquiry = () => {
+  const phoneNumber = "919622992881"; 
+  const message = "Hello, I would like to enquire about your tours.";
+  const encodedMessage = encodeURIComponent(message);
+
+  window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
+};
   const timelineSteps = [
     {
       number: '01',
@@ -76,6 +86,7 @@ export default function About() {
       description: 'We maintain group sizes that ensure personalized attention and minimize impact on local communities and environment.'
     }
   ];
+  
 
   return (
     <div className="bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -420,7 +431,7 @@ export default function About() {
                   className="text-sm leading-relaxed max-w-[360px] text-[#F3F4F1]"
                   style={{ textAlign: "justify", textAlignLast: "left" }}
                 >
-                  Our commitment to responsible tourism ensures minimal environmental impact and maximum community benefit.
+                  Our commitment to the  responsible tourism to  ensures the minimal environmental impact and maximum community benefit.
                 </p>
               </div>
             </div>
@@ -452,7 +463,7 @@ export default function About() {
                   <p
                     className="text-sm leading-relaxed text-justify max-w-[320px] text-[#F3F4F1] font-light"
                   >
-                    Committed to preserving pristine environments and supporting mountain communities.
+                    Committed to the preserving pristine environments and supporting mountain communities.
                   </p>
               </div>
             </div>
@@ -469,7 +480,7 @@ export default function About() {
           fontFamily: 'Inter, sans-serif',
         }}
       >
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto ">
           {/* Section Header */}
           <div className="text-center mb-16">
             <div className="flex justify-center mb-3">
@@ -506,25 +517,36 @@ export default function About() {
                 {step.align === 'left' ? (
                   <>
                     {/* Text Content - Left */}
-                    <div className="lg:col-span-7 relative">
-                      <div
-                        className="inline-flex w-11 h-11 rounded-full items-center justify-center mb-4"
-                        style={{ backgroundColor: '#2B1E17' }}
-                      >
-                        <span className="text-sm" style={{ color: '#FFFFFF', fontWeight: 600 }}>
-                          {step.number}
-                        </span>
-                      </div>
-                      <h3 className="text-lg mb-1" style={{ color: '#2B1E17', fontWeight: 600 }}>
+                   <div className="lg:col-span-7 relative">
+                  <div className="flex items-start gap-5">
+
+                    {/* Circle */}
+                    <div
+                      className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: '#2B1E17' }}
+                    >
+                      <span className="text-sm text-white font-semibold">
+                        {step.number}
+                      </span>
+                    </div>
+
+                    {/* Text Content */}
+                    <div>
+                      <h3 className="text-lg mb-1 font-semibold text-[#2B1E17]">
                         {step.title}
                       </h3>
-                      <p className="text-xs mb-4" style={{ color: '#F4A321', fontWeight: 500 }}>
+
+                      <p className="text-sm mb-2 font-medium text-[#F4A321]">
                         {step.subtitle}
                       </p>
-                      <p className="text-xs leading-relaxed" style={{ color: '#6B5E55', fontWeight: 400, lineHeight: '1.7' }}>
+
+                      <p className="text-sm leading-relaxed text-[#4A5565]" style={{ lineHeight: "1.7" }}>
                         {step.description}
                       </p>
                     </div>
+
+                  </div>
+                </div>
 
                     {/* Image - Right */}
                     <div className="lg:col-span-5">
@@ -569,25 +591,45 @@ export default function About() {
                     </div>
 
                     {/* Text Content - Right */}
-                    <div className="lg:col-span-7 order-1 lg:order-2 relative">
+                   <div className="lg:col-span-7 order-1 lg:order-2 relative">
+                    <div className="flex items-start gap-5">
+
+                      {/* Circle */}
                       <div
-                        className="inline-flex w-11 h-11 rounded-full items-center justify-center mb-4"
+                        className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
                         style={{ backgroundColor: '#2B1E17' }}
                       >
                         <span className="text-sm" style={{ color: '#FFFFFF', fontWeight: 600 }}>
                           {step.number}
                         </span>
                       </div>
-                      <h3 className="text-lg mb-1" style={{ color: '#2B1E17', fontWeight: 600 }}>
-                        {step.title}
-                      </h3>
-                      <p className="text-xs mb-4" style={{ color: '#F4A321', fontWeight: 500 }}>
-                        {step.subtitle}
-                      </p>
-                      <p className="text-xs leading-relaxed" style={{ color: '#6B5E55', fontWeight: 400, lineHeight: '1.7' }}>
-                        {step.description}
-                      </p>
+
+                      {/* Text */}
+                      <div>
+                        <h3
+                          className="text-lg mb-1"
+                          style={{ color: '#2B1E17', fontWeight: 600 }}
+                        >
+                          {step.title}
+                        </h3>
+
+                        <p
+                          className="text-sm mb-3"
+                          style={{ color: '#F4A321', fontWeight: 500 }}
+                        >
+                          {step.subtitle}
+                        </p>
+
+                        <p
+                          className="text-sm leading-relaxed"
+                          style={{ color: '#4A5565', fontWeight: 400, lineHeight: '1.7' }}
+                        >
+                          {step.description}
+                        </p>
+                      </div>
+
                     </div>
+                  </div>
                   </>
                 )}
               </div>
@@ -596,77 +638,50 @@ export default function About() {
         </div>
 
         {/* Bottom Highlight Bar */}
-        <div className="max-w-5xl mx-auto px-6 mt-8 relative -top-10">
-          <div
-            className="rounded-2xl"
-            style={{
-              backgroundColor: '#3D2B22',
-              paddingTop: '28px',
-              paddingBottom: '28px',
-            }}
-          >
-            <div className="px-6">
-              <div
-                className="bottom-bar-grid"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: '24px',
-                  textAlign: 'center',
-                }}
-              >
-                {/* Item 1 */}
-                <div className="flex items-center justify-center gap-3 leading-tight">
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: 'rgba(244, 163, 33, 0.2)' }}
-                  >
-                    <MapPin className="w-4 h-4" style={{ color: '#F4A321' }} />
-                  </div>
-                  <p className="text-xs text-left leading-snug" style={{ color: '#FFFFFF', fontWeight: 400 }}>
-                    Official<br />Tourism Registration
-                  </p>
-                </div>
+<div className="max-w-5xl mx-auto px-6 mt-8 relative -top-10">
+  <div
+    className="rounded-2xl py-7"
+    style={{ backgroundColor: "#281910" }}
+  >
+    <div className="px-6">
 
-                {/* Item 2 */}
-                <div className="flex items-center justify-center gap-3">
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: 'rgba(244, 163, 33, 0.2)' }}
-                  >
-                    <svg className="w-4 h-4" style={{ color: '#F4A321' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <p className="text-xs text-left" style={{ color: '#FFFFFF', fontWeight: 400 }}>
-                    Ladakh<br />"Little Tibet" Focus
-                  </p>
-                </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
 
-                {/* Item 3 */}
-                <div className="flex items-center justify-center gap-3">
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: 'rgba(244, 163, 33, 0.2)' }}
-                  >
-                    <svg className="w-4 h-4" style={{ color: '#F4A321' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </div>
-                  <p className="text-xs text-left" style={{ color: '#FFFFFF', fontWeight: 400 }}>
-                    Cultural<br />Preservation Mission
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Item 1 */}
+        <div className="flex items-start justify-center gap-3">
+          <Award className="w-6 h-6 text-[#F4A321] mt-[2px]" />
+          <p className="text-sm text-left leading-snug text-[#F3F4F1]">
+            Official <br /> Tourism Registration
+          </p>
         </div>
+
+        {/* Item 2 */}
+        <div className="flex items-start justify-center gap-3">
+          <Mountain className="w-6 h-6 text-[#F4A321] mt-[2px]" />
+          <p className="text-sm text-left leading-snug text-[#F3F4F1]">
+            Ladakh <br /> "Little Tibet" Focus
+          </p>
+        </div>
+
+        {/* Item 3 */}
+        <div className="flex items-start justify-center gap-3">
+          <Heart className="w-6 h-6 text-[#F4A321] mt-[2px]" />
+          <p className="text-sm text-left leading-snug text-[#F3F4F1]">
+            Cultural <br /> Preservation Mission
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
       </section>
 
       {/* Principles Section */}
       <section
         style={{
-          background: 'linear-gradient(135deg, #1A0F0A 0%, #2B1E17 100%)',
+          background: '#281910',
           paddingTop: '80px',
           paddingBottom: '80px',
           fontFamily: 'Inter, sans-serif',
@@ -680,14 +695,12 @@ export default function About() {
                 className="w-12 h-12 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: '#F4A321' }}
               >
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
+                <Compass className="w-6 h-6 text-white" />
               </div>
             </div>
             <p
-              className="text-sm leading-relaxed"
-              style={{ color: '#D6CFC8', fontWeight: 400, lineHeight: '1.6' }}
+              className="text-xl leading-relaxed"
+              style={{ color: '#F3F4F1', fontWeight: 400, lineHeight: '1.6' }}
             >
               These guiding principles shape every journey we create and every decision we make as an organization.
             </p>
@@ -727,12 +740,12 @@ export default function About() {
                     className="w-11 h-11 rounded-full flex items-center justify-center mb-5"
                     style={{ backgroundColor: '#F4A321' }}
                   >
-                    <IconComponent className="w-5 h-5 text-white" />
+                    <Compass className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-base mb-3" style={{ color: '#FFFFFF', fontWeight: 500 }}>
+                  <h3 className="text-2xl mb-3" style={{ color: '#F3F4F1',fontFamily: ' sans-serif', fontWeight:  100 }}>
                     {principle.title}
                   </h3>
-                  <p className="text-xs leading-relaxed" style={{ color: '#D6CFC8', fontWeight: 400, lineHeight: '1.7' }}>
+                  <p className="text-md leading-relaxed" style={{ color: '#F3F4F1',fontFamily: 'sans-serif', fontWeight: 100, lineHeight: '1.7' }}>
                     {principle.description}
                   </p>
                 </div>
@@ -764,8 +777,8 @@ export default function About() {
 
           {/* Heading */}
           <h2
-            className="text-3xl mb-4"
-            style={{ color: '#2B1E17', fontWeight: 600 }}
+            className="text-4xl mb-4"
+            style={{ color: '#2B1E17', fontWeight: 200, fontFamily: 'Berlin Sans FB' }}
           >
             Ready to Begin Your Journey?
           </h2>
@@ -773,7 +786,7 @@ export default function About() {
           {/* Supporting Text */}
           <p
             className="text-sm leading-relaxed mb-8 max-w-xl mx-auto"
-            style={{ color: '#6B5E55', fontWeight: 400, lineHeight: '1.6' }}
+            style={{ color: '#4A5565', fontWeight: 400, lineHeight: '1.6' }}
           >
             Whether you're interested in a specific tour or want to create a customized cultural experience, we're here to help you discover the heart of the Himalayas.
           </p>
@@ -791,52 +804,59 @@ export default function About() {
             }}
           >
             {/* Primary Button */}
+            {/* Primary Button */}
             <button
-              className="transition-all duration-200 ease-out cta-button"
+            onClick={handleWhatsAppEnquiry}
+              className="flex items-center justify-center gap-2 transition-all duration-200 ease-out"
               style={{
-                backgroundColor: '#2B1E17',
-                color: '#FFFFFF',
+                backgroundColor: "#2B1E17",
+                color: "#FFFFFF",
                 fontWeight: 500,
-                fontSize: '14px',
-                padding: '12px 28px',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                width: '100%',
-                maxWidth: '180px',
+                fontSize: "15px",
+                padding: "12px 22px",
+                borderRadius: "10px",
+                border: "none",
+                cursor: "pointer",
+                width: "fit-content",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#1C120C';
+                e.currentTarget.style.backgroundColor = "#F4A321";
+                e.currentTarget.style.color = "#2B1E17";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#2B1E17';
+                e.currentTarget.style.backgroundColor = "#2B1E17";
+                e.currentTarget.style.color = "#FFFFFF";
               }}
             >
+              <Send size={18} />
               Enquire Now
             </button>
 
+
             {/* Secondary Button */}
             <button
-              className="transition-all duration-200 ease-out cta-button"
+              className="transition-all duration-200 ease-out"
               style={{
-                backgroundColor: 'transparent',
-                color: '#2B1E17',
+                backgroundColor: "transparent",
+                color: "#2B1E17",
                 fontWeight: 500,
-                fontSize: '14px',
-                padding: '11px 28px',
-                borderRadius: '8px',
-                border: '1.5px solid #2B1E17',
-                cursor: 'pointer',
-                width: '100%',
-                maxWidth: '180px',
+                fontSize: "14px",
+                padding: "11px 28px",
+                borderRadius: "8px",
+                border: "1.5px solid #2B1E17",
+                cursor: "pointer",
+                width: "100%",
+                maxWidth: "180px",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#2B1E17';
-                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.backgroundColor = "#F4A321";
+                e.currentTarget.style.color = "#2B1E17";
+                e.currentTarget.style.borderColor = "#F4A321";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#2B1E17';
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.color = "#2B1E17";
+                e.currentTarget.style.borderColor = "#2B1E17";
               }}
             >
               Explore Our Tours
