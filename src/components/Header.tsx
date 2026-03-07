@@ -214,7 +214,7 @@
           ) : (
             <button
               onClick={() => setIsAuthModalOpen(true)}
-              className="px-5 py-3 rounded transition-all duration-300"
+              className="flex items-center justify-center h-[41px] lg:h-[44px] px-5 rounded transition-all duration-300"
               style={{
                 border: `1px solid ${primaryColor}`,
                 color: primaryColor,
