@@ -1,6 +1,15 @@
 import { Mountain, Instagram, Youtube, MapPin, Phone, Mail } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Footer() {
+  const navigate = useNavigate();
+  const quickLinks = [
+    { label: "About Us", path: "/about" },
+    { label: "Our Tours", path: "/tours" },
+    { label: "Volunteer Programs", path: "/tours/08d1d67e-b2a7-4809-9645-3bb82023954f" },
+    { label: "Blog", path: "/blog" }
+  ];
+
   return (
     <footer className="bg-[#F5F1E8] text-[#3D3226]">
       <style>{`
@@ -43,6 +52,7 @@ export default function Footer() {
             gap: '40px',
           }}
         >
+
           {/* Column 1: Brand */}
           <div className="footer-brand-col space-y-5">
             <div className="flex items-start">
@@ -56,62 +66,83 @@ export default function Footer() {
               Discover the heart of the Himalayas through meaningful travel experiences
               that connect you with culture, nature, and tradition.
             </p>
+
             <div className="flex gap-4 pt-2">
-              <a
-                href="#"
-                className="hover:text-[#8B6F47] transition-colors duration-200"
-                aria-label="Instagram"
-              >
+              <a href="#" className="hover:text-[#8B6F47] transition-colors duration-200">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a
-                href="#"
-                className="hover:text-[#8B6F47] transition-colors duration-200"
-                aria-label="YouTube"
-              >
+              <a href="#" className="hover:text-[#8B6F47] transition-colors duration-200">
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
           </div>
 
+          
           {/* Column 2: Quick Links */}
           <div>
             <h3 className="text-base font-semibold mb-5">Quick Links</h3>
+
             <ul className="space-y-3">
-              {['About Us', 'Our Tours', 'Volunteer Programs', 'Blog', 'Testimonials', 'FAQs'].map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  <button
+                    onClick={() => navigate(link.path)}
                     className="text-sm text-[#5C5346] hover:text-[#3D3226] hover:underline underline-offset-4 transition-all duration-200"
                   >
-                    {link}
-                  </a>
+                    {link.label}
+                  </button>
                 </li>
               ))}
             </ul>
-          </div>
-
+          </div>  
           {/* Column 3: Resources */}
           <div>
             <h3 className="text-base font-semibold mb-5">Resources</h3>
             <ul className="space-y-3">
-              {[
-                'Travel Guide',
-                'Safety Guidelines',
-                'Packing List',
-                'Booking Policy',
-                'Privacy Policy',
-                'Terms & Conditions'
-              ].map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-sm text-[#5C5346] hover:text-[#3D3226] hover:underline underline-offset-4 transition-all duration-200"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a
+                  href="/pdf/heritage_himalaya_tips_and_guidelines.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#5C5346] hover:text-[#3D3226] hover:underline underline-offset-4 transition-all duration-200"
+                >
+                  Tips & Guidelines
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="/pdf/heritage_himalaya_booking_policy.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#5C5346] hover:text-[#3D3226] hover:underline underline-offset-4 transition-all duration-200"
+                >
+                  Booking Policy
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="/pdf/heritage_himalaya_privacy_policy.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#5C5346] hover:text-[#3D3226] hover:underline underline-offset-4 transition-all duration-200"
+                >
+                  Privacy Policy
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="/pdf/heritage_himalaya_terms_conditions.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#5C5346] hover:text-[#3D3226] hover:underline underline-offset-4 transition-all duration-200"
+                >
+                  Terms & Conditions
+                </a>
+              </li>
+
             </ul>
           </div>
 
@@ -122,26 +153,31 @@ export default function Footer() {
               <li className="flex gap-3 text-sm text-[#5C5346]">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>
-                  Heritage Himalaya Trails<br />Tsangspa House,<br />
-                  Near GurudwaraSingh Sabha,
-                  Nawshar, <br />
+                  Heritage Himalaya Trails<br />
+                  Tsangspa House,<br />
+                  Near Gurudwara Singh Sabha,<br />
+                  Nawshar,<br />
                   Leh 194101, Ladakh, India
                 </span>
               </li>
+
               <li className="flex gap-3 text-sm text-[#5C5346]">
                 <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <a href="tel:+9771234567890" className="hover:text-[#3D3226] transition-colors duration-200">
+                <a href="tel:+919622992881" className="hover:text-[#3D3226] transition-colors duration-200">
                   +9419218013 / 9622992881
                 </a>
               </li>
+
               <li className="flex gap-3 text-sm text-[#5C5346]">
                 <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <a href="mailto:info.hhtrails@gmail.com" className="hover:text-[#3D3226] transition-colors duration-200">
-                  info.hhtrails@gmail.com
+                <a href="mailto:heritagetrails.ladakh@gmail.com" className="hover:text-[#3D3226] transition-colors duration-200">
+                  heritagetrails.ladakh@gmail.com
+
                 </a>
               </li>
             </ul>
           </div>
+
         </div>
 
         {/* Bottom Section */}
@@ -154,6 +190,7 @@ export default function Footer() {
             </p>
           </div>
         </div>
+
       </div>
     </footer>
   );
