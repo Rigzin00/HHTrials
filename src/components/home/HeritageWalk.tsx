@@ -25,8 +25,8 @@ const handleWhatsAppEnquiry = (walkTitle: string) => {
 const walks: Walk[] = [
   {
     id: 1,
-    image: "/WhatsApp Image 2026-03-08 at 1.57.43 PM.jpeg",
-    title: "Book a Heritage Walk",
+    image: "/Heritage_walk.jpeg",
+    title: "Heritage Walk",
     duration: "2-3 Hours",
     description:
       "Explore Leh's historic Old Town on a guided heritage walk led by Dr. Sonam Wangchok. Visit landmarks like Leh Palace and the Central Asian Museum while learning about Ladakh's history, architecture, culture, and heritage preservation.",
@@ -48,7 +48,7 @@ const walks: Walk[] = [
   },
   {
     id: 2,
-    image: "/WhatsApp Image 2026-03-08 at 3.10.18 PM.jpeg",
+    image: "/Heritage_talk.jpeg",
     title: "Heritage Talk",
     duration: "1 Hour Talk + 30 Minutes Q&A",
     description:
@@ -127,9 +127,16 @@ const HeritageWalk = () => {
           onClick={() => setSelected(null)}
         >
           <div
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
+            <button
+              onClick={() => setSelected(null)}
+              className="absolute top-4 right-4 z-20 bg-black/30 hover:bg-black/50 text-white rounded-full p-1.5 transition-colors"
+            >
+              <X size={18} />
+            </button>
+            <div className="overflow-y-auto">
             <div className="relative h-52 overflow-hidden rounded-t-2xl">
               <img
                 src={selected.image}
@@ -140,12 +147,6 @@ const HeritageWalk = () => {
               <h2 className="absolute bottom-4 left-6 font-berlin text-2xl text-white">
                 {selected.title}
               </h2>
-              <button
-                onClick={() => setSelected(null)}
-                className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white rounded-full p-1.5 transition-colors"
-              >
-                <X size={18} />
-              </button>
             </div>
 
             <div className="p-6 space-y-6">
@@ -209,6 +210,7 @@ const HeritageWalk = () => {
                 Enquire Now
                 <ArrowRight className="w-4 h-4" />
               </button>
+            </div>
             </div>
           </div>
         </div>
