@@ -7,15 +7,14 @@
 
 ### Tour Detail Page
 - [ ] Don't show saved when not logged in P
-- [ ] CUSTOMIZE TOUR A/P
-- [ ] Image Clarity* P
-- [ ] Send Itinerary -> Send to phone number via WhatsApp : Change url R
-- [ ] Download Itinerary -> PDF : Change Logo Color background R
-
-### About Us Page
-- [ ] Mobile Responsiveness Final Check R
+- [ ] CUSTOMIZE TOUR P
 
 ### Blog Page
 - [ ] Travellers Library Integration P
-- [ ] Filters Mobile Responsiveness - All icon R
 - [ ] Email Integration A
+
+### Add Ons
+- [ ] Id to name on tour url
+- [ ] Caches
+- [ ] Image Clarity
+- [ ] Database image deletion
