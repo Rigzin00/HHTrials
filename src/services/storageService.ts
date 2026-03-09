@@ -1,14 +1,17 @@
 import { supabase } from '../lib/supabaseClient';
 
 const BUCKET_NAME = 'tour-images';
+type StorageFolder = 'tours' | 'itinerary' | 'blogs';
 
 class StorageService {
 
   /**
-   * Upload image to Supabase Storage
-   * Returns public URL
+   * Upload an image to a specific folder inside the storage bucket.
+   * @param file   - The image File to upload.
+   * @param folder - Destination folder: 'tours', 'itinerary', or 'blogs'.
+   * Returns the public URL of the uploaded image.
    */
-  async uploadTourImage(file: File): Promise<string> {
+  async uploadImage(file: File, folder: StorageFolder): Promise<string> {
     if (!file) {
       throw new Error('No file provided');
     }
@@ -21,7 +24,7 @@ class StorageService {
     // Create unique filename
     const fileExt = file.name.split('.').pop();
     const fileName = `${crypto.randomUUID()}.${fileExt}`;
-    const filePath = `tours/${fileName}`;
+    const filePath = `${folder}/${fileName}`;
 
     // Upload file
     const { error } = await supabase.storage
@@ -41,9 +44,12 @@ class StorageService {
       .from(BUCKET_NAME)
       .getPublicUrl(filePath);
 
-    console.log('Uploaded image URL:', data.publicUrl);
-
     return data.publicUrl;
+  }
+
+  /** Upload a tour cover or tour-details image (stored in the tours/ folder). */
+  async uploadTourImage(file: File): Promise<string> {
+    return this.uploadImage(file, 'tours');
   }
 
   /**
