@@ -178,6 +178,13 @@ const AdminPage = () => {
   const [blogCoverFile, setBlogCoverFile] = useState<File | null>(null);
   const [blogCoverPreview, setBlogCoverPreview] = useState<string | null>(null);
 
+  // Details media files — uploaded to tours/ folder
+  const [accommodationMediaFile, setAccommodationMediaFile] = useState<File | null>(null);
+  const [featureMediaFile, setFeatureMediaFile] = useState<File | null>(null);
+  const [routePhotoFile, setRoutePhotoFile] = useState<File | null>(null);
+  // Itinerary day image — uploaded to itinerary/ folder
+  const [dayImageFile, setDayImageFile] = useState<File | null>(null);
+
   const isBlogEditing = Boolean(blogForm.id);
 
   const isEditing = Boolean(form.id);
@@ -225,6 +232,8 @@ const AdminPage = () => {
     if (!file) return;
     setBlogCoverFile(file);
     setBlogCoverPreview(URL.createObjectURL(file));
+    // Clear any manually-typed URL so the uploaded file takes priority
+    setBlogForm((prev) => ({ ...prev, coverImageUrl: '' }));
   };
 
   const resetBlogForm = () => {
@@ -270,8 +279,13 @@ const AdminPage = () => {
     setBlogSubmitting(true);
     setBlogError(null);
     try {
+      if (!isBlogEditing && !blogCoverFile && !blogForm.coverImageUrl) {
+        setBlogError('Cover image is required — upload a file or paste a URL');
+        setBlogSubmitting(false);
+        return;
+      }
       let coverImageUrl = blogForm.coverImageUrl;
-      if (blogCoverFile) coverImageUrl = await storageService.uploadTourImage(blogCoverFile);
+      if (blogCoverFile) coverImageUrl = await storageService.uploadImage(blogCoverFile, 'blogs');
 
       const payload = {
         category: blogForm.category,
@@ -338,6 +352,10 @@ const AdminPage = () => {
     setDayForm(emptyDayForm);
     setEditingDayNumber(null);
     setItineraryError(null);
+    setAccommodationMediaFile(null);
+    setFeatureMediaFile(null);
+    setRoutePhotoFile(null);
+    setDayImageFile(null);
   };
 
   const loadDetailsAndItinerary = async (tourId: string) => {
@@ -431,7 +449,7 @@ const AdminPage = () => {
 
       // Upload image if new file selected
       if (selectedFile) {
-        photoUrl = await storageService.uploadTourImage(selectedFile);
+        photoUrl = await storageService.uploadImage(selectedFile, 'tours');
       }
 
       const payload = {
@@ -479,21 +497,43 @@ const AdminPage = () => {
     if (!form.id) return;
     setDetailsSubmitting(true);
     setDetailsError(null);
-    const payload = {
-      overview: detailsForm.overview,
-      highlights: splitLines(detailsForm.highlights),
-      inclusions: splitLines(detailsForm.inclusions),
-      exclusions: splitLines(detailsForm.exclusions),
-      accommodationDescription: detailsForm.accommodationDescription || null,
-      accommodationMediaUrl: detailsForm.accommodationMediaUrl || null,
-      featureDescription: detailsForm.featureDescription || null,
-      featureTitle: detailsForm.featureTitle || null,
-      featureMediaUrl: detailsForm.featureMediaUrl || null,
-      featureIsVideo: detailsForm.featureIsVideo,
-      routeDescription: detailsForm.routeDescription || null,
-      routePhotoUrl: detailsForm.routePhotoUrl || null,
-    };
     try {
+      // Upload any newly selected media files into the tours/ folder
+      let accommodationMediaUrl = detailsForm.accommodationMediaUrl;
+      if (accommodationMediaFile) {
+        accommodationMediaUrl = await storageService.uploadImage(accommodationMediaFile, 'tours');
+        setAccommodationMediaFile(null);
+        setDetailsForm((prev) => ({ ...prev, accommodationMediaUrl }));
+      }
+
+      let featureMediaUrl = detailsForm.featureMediaUrl;
+      if (featureMediaFile && !detailsForm.featureIsVideo) {
+        featureMediaUrl = await storageService.uploadImage(featureMediaFile, 'tours');
+        setFeatureMediaFile(null);
+        setDetailsForm((prev) => ({ ...prev, featureMediaUrl }));
+      }
+
+      let routePhotoUrl = detailsForm.routePhotoUrl;
+      if (routePhotoFile) {
+        routePhotoUrl = await storageService.uploadImage(routePhotoFile, 'tours');
+        setRoutePhotoFile(null);
+        setDetailsForm((prev) => ({ ...prev, routePhotoUrl }));
+      }
+
+      const payload = {
+        overview: detailsForm.overview,
+        highlights: splitLines(detailsForm.highlights),
+        inclusions: splitLines(detailsForm.inclusions),
+        exclusions: splitLines(detailsForm.exclusions),
+        accommodationDescription: detailsForm.accommodationDescription || null,
+        accommodationMediaUrl: accommodationMediaUrl || null,
+        featureDescription: detailsForm.featureDescription || null,
+        featureTitle: detailsForm.featureTitle || null,
+        featureMediaUrl: featureMediaUrl || null,
+        featureIsVideo: detailsForm.featureIsVideo,
+        routeDescription: detailsForm.routeDescription || null,
+        routePhotoUrl: routePhotoUrl || null,
+      };
       if (detailsExists) {
         const updated = await toursService.updateDetails(form.id, payload);
         setDetails(updated);
@@ -521,6 +561,7 @@ const AdminPage = () => {
   const handleEditDay = (day: ItineraryDay) => {
     setEditingDayNumber(day.dayNumber);
     setDayForm({ dayNumber: String(day.dayNumber), description: day.description, imageUrl: day.imageUrl, imageTitle: day.imageTitle ?? '' });
+    setDayImageFile(null);
   };
 
   const handleDeleteDay = async (dayNumber: number) => {
@@ -543,10 +584,21 @@ const AdminPage = () => {
     setDaySubmitting(true);
     setItineraryError(null);
     try {
+      // Upload day image to itinerary/ folder if a file was selected
+      let imageUrl = dayForm.imageUrl;
+      if (dayImageFile) {
+        imageUrl = await storageService.uploadImage(dayImageFile, 'itinerary');
+      }
+
+      if (editingDayNumber === null && !imageUrl) {
+        setItineraryError('Image is required — upload a file or paste a URL');
+        return;
+      }
+
       if (editingDayNumber !== null) {
         const updated = await toursService.updateItineraryDay(form.id, editingDayNumber, {
           description: dayForm.description,
-          imageUrl: dayForm.imageUrl || undefined,
+          imageUrl: imageUrl || undefined,
           imageTitle: dayForm.imageTitle || null,
         });
         setItinerary((prev) => prev.map((d) => (d.dayNumber === editingDayNumber ? updated : d)));
@@ -554,12 +606,13 @@ const AdminPage = () => {
         const added = await toursService.addItineraryDay(form.id, {
           dayNumber: Number(dayForm.dayNumber),
           description: dayForm.description,
-          imageUrl: dayForm.imageUrl,
+          imageUrl,
           imageTitle: dayForm.imageTitle || null,
         });
         setItinerary((prev) => [...prev, added].sort((a, b) => a.dayNumber - b.dayNumber));
       }
       setDayForm(emptyDayForm);
+      setDayImageFile(null);
       setEditingDayNumber(null);
     } catch (err) {
       console.error(err);
@@ -791,8 +844,33 @@ const AdminPage = () => {
                         <textarea name="accommodationDescription" value={detailsForm.accommodationDescription} onChange={handleDetailsInput} rows={2} className="w-full border p-2 rounded" />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Accommodation Media URL</label>
-                        <input name="accommodationMediaUrl" value={detailsForm.accommodationMediaUrl} onChange={handleDetailsInput} type="url" className="w-full border p-2 rounded" placeholder="https://…" />
+                        <label className="block text-xs text-gray-500 mb-1">Accommodation Image</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="mb-1 text-sm"
+                          onChange={(e) => {
+                            const f = e.target.files?.[0] ?? null;
+                            setAccommodationMediaFile(f);
+                            if (f) setDetailsForm((p) => ({ ...p, accommodationMediaUrl: '' }));
+                          }}
+                        />
+                        <input
+                          name="accommodationMediaUrl"
+                          value={detailsForm.accommodationMediaUrl}
+                          onChange={(e) => { handleDetailsInput(e); setAccommodationMediaFile(null); }}
+                          disabled={Boolean(accommodationMediaFile)}
+                          type="url"
+                          className="w-full border p-2 rounded disabled:bg-gray-50 disabled:opacity-60"
+                          placeholder="Or paste URL…"
+                        />
+                        {(accommodationMediaFile || detailsForm.accommodationMediaUrl) && (
+                          <img
+                            src={accommodationMediaFile ? URL.createObjectURL(accommodationMediaFile) : detailsForm.accommodationMediaUrl}
+                            alt="Accommodation preview"
+                            className="mt-2 w-24 h-16 object-cover rounded border"
+                          />
+                        )}
                       </div>
                       <div>
                         <label className="block text-xs text-gray-500 mb-1">Feature Title</label>
@@ -803,8 +881,37 @@ const AdminPage = () => {
                         <textarea name="featureDescription" value={detailsForm.featureDescription} onChange={handleDetailsInput} rows={2} className="w-full border p-2 rounded" />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Feature Media URL</label>
-                        <input name="featureMediaUrl" value={detailsForm.featureMediaUrl} onChange={handleDetailsInput} type="url" className="w-full border p-2 rounded" placeholder="https://…" />
+                        <label className="block text-xs text-gray-500 mb-1">
+                          Feature Media {detailsForm.featureIsVideo ? '(Video — paste URL below)' : '(Image)'}
+                        </label>
+                        {!detailsForm.featureIsVideo && (
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="mb-1 text-sm"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0] ?? null;
+                              setFeatureMediaFile(f);
+                              if (f) setDetailsForm((p) => ({ ...p, featureMediaUrl: '' }));
+                            }}
+                          />
+                        )}
+                        <input
+                          name="featureMediaUrl"
+                          value={detailsForm.featureMediaUrl}
+                          onChange={(e) => { handleDetailsInput(e); if (!detailsForm.featureIsVideo) setFeatureMediaFile(null); }}
+                          disabled={!detailsForm.featureIsVideo && Boolean(featureMediaFile)}
+                          type="url"
+                          className="w-full border p-2 rounded disabled:bg-gray-50 disabled:opacity-60"
+                          placeholder={detailsForm.featureIsVideo ? 'Video URL…' : 'Or paste image URL…'}
+                        />
+                        {!detailsForm.featureIsVideo && (featureMediaFile || detailsForm.featureMediaUrl) && (
+                          <img
+                            src={featureMediaFile ? URL.createObjectURL(featureMediaFile) : detailsForm.featureMediaUrl}
+                            alt="Feature preview"
+                            className="mt-2 w-24 h-16 object-cover rounded border"
+                          />
+                        )}
                       </div>
                       <label className="flex items-center gap-2 text-xs">
                         <input type="checkbox" name="featureIsVideo" checked={detailsForm.featureIsVideo} onChange={handleDetailsInput} />
@@ -815,8 +922,33 @@ const AdminPage = () => {
                         <textarea name="routeDescription" value={detailsForm.routeDescription} onChange={handleDetailsInput} rows={2} className="w-full border p-2 rounded" />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Route Photo URL</label>
-                        <input name="routePhotoUrl" value={detailsForm.routePhotoUrl} onChange={handleDetailsInput} type="url" className="w-full border p-2 rounded" placeholder="https://…" />
+                        <label className="block text-xs text-gray-500 mb-1">Route Photo</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="mb-1 text-sm"
+                          onChange={(e) => {
+                            const f = e.target.files?.[0] ?? null;
+                            setRoutePhotoFile(f);
+                            if (f) setDetailsForm((p) => ({ ...p, routePhotoUrl: '' }));
+                          }}
+                        />
+                        <input
+                          name="routePhotoUrl"
+                          value={detailsForm.routePhotoUrl}
+                          onChange={(e) => { handleDetailsInput(e); setRoutePhotoFile(null); }}
+                          disabled={Boolean(routePhotoFile)}
+                          type="url"
+                          className="w-full border p-2 rounded disabled:bg-gray-50 disabled:opacity-60"
+                          placeholder="Or paste URL…"
+                        />
+                        {(routePhotoFile || detailsForm.routePhotoUrl) && (
+                          <img
+                            src={routePhotoFile ? URL.createObjectURL(routePhotoFile) : detailsForm.routePhotoUrl}
+                            alt="Route preview"
+                            className="mt-2 w-24 h-16 object-cover rounded border"
+                          />
+                        )}
                       </div>
                       <button type="submit" disabled={detailsSubmitting} className="px-4 py-2 bg-[#2B1E17] text-white rounded text-sm disabled:opacity-60">
                         {detailsSubmitting ? 'Saving…' : detailsExists ? 'Update Details' : 'Create Details'}
@@ -864,13 +996,41 @@ const AdminPage = () => {
                         )}
                         <textarea name="description" value={dayForm.description} onChange={handleDayInput} rows={3} placeholder="Description *" required className="w-full border p-2 rounded text-sm" />
                         <input name="imageTitle" type="text" value={dayForm.imageTitle} onChange={handleDayInput} placeholder="Image title (e.g. Arrival at Leh Airport)" className="w-full border p-2 rounded text-sm" />
-                        <input name="imageUrl" type="url" value={dayForm.imageUrl} onChange={handleDayInput} placeholder={editingDayNumber !== null ? 'Image URL (leave blank to keep)' : 'Image URL *'} required={editingDayNumber === null} className="w-full border p-2 rounded text-sm" />
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1">Day Image {editingDayNumber === null ? '*' : ''}</label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="mb-1 text-sm"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0] ?? null;
+                              setDayImageFile(f);
+                              if (f) setDayForm((p) => ({ ...p, imageUrl: '' }));
+                            }}
+                          />
+                          <input
+                            name="imageUrl"
+                            type="url"
+                            value={dayForm.imageUrl}
+                            onChange={(e) => { handleDayInput(e); setDayImageFile(null); }}
+                            disabled={Boolean(dayImageFile)}
+                            placeholder={editingDayNumber !== null ? 'Or paste URL (leave blank to keep)' : 'Or paste URL…'}
+                            className="w-full border p-2 rounded text-sm disabled:bg-gray-50 disabled:opacity-60"
+                          />
+                          {(dayImageFile || dayForm.imageUrl) && (
+                            <img
+                              src={dayImageFile ? URL.createObjectURL(dayImageFile) : dayForm.imageUrl}
+                              alt="Day preview"
+                              className="mt-2 w-20 h-14 object-cover rounded border"
+                            />
+                          )}
+                        </div>
                         <div className="flex gap-2">
                           <button type="submit" disabled={daySubmitting} className="px-3 py-1.5 bg-[#2B1E17] text-white rounded text-sm disabled:opacity-60">
                             {daySubmitting ? 'Saving…' : editingDayNumber !== null ? 'Update Day' : 'Add Day'}
                           </button>
                           {editingDayNumber !== null && (
-                            <button type="button" onClick={() => { setEditingDayNumber(null); setDayForm(emptyDayForm); }} className="px-3 py-1.5 border rounded text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
+                            <button type="button" onClick={() => { setEditingDayNumber(null); setDayForm(emptyDayForm); setDayImageFile(null); }} className="px-3 py-1.5 border rounded text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
                           )}
                         </div>
                       </form>
@@ -945,14 +1105,19 @@ const AdminPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Cover image</label>
-                  <input type="file" accept="image/*" onChange={handleBlogCoverChange} required={!isBlogEditing} />
-                  {blogCoverPreview && <img src={blogCoverPreview} alt="Preview" className="mt-2 w-24 h-24 object-cover rounded border" />}
-                  {isBlogEditing && !blogCoverFile && (
-                    <div className="mt-2">
-                      <label className="block text-xs text-gray-500 mb-1">Or update URL directly</label>
-                      <input name="coverImageUrl" type="url" value={blogForm.coverImageUrl} onChange={handleBlogInput} className="w-full border p-2 rounded" placeholder="https://…" />
-                    </div>
+                  <label className="block text-xs text-gray-500 mb-1">Cover Image {!isBlogEditing ? '*' : ''}</label>
+                  <input type="file" accept="image/*" className="mb-1" onChange={handleBlogCoverChange} />
+                  <input
+                    name="coverImageUrl"
+                    type="url"
+                    value={blogForm.coverImageUrl}
+                    onChange={(e) => { handleBlogInput(e); setBlogCoverFile(null); setBlogCoverPreview(null); }}
+                    disabled={Boolean(blogCoverFile)}
+                    placeholder="Or paste URL…"
+                    className="w-full border p-2 rounded disabled:bg-gray-50 disabled:opacity-60"
+                  />
+                  {(blogCoverPreview || blogForm.coverImageUrl) && (
+                    <img src={blogCoverPreview || blogForm.coverImageUrl} alt="Cover preview" className="mt-2 w-24 h-24 object-cover rounded border" />
                   )}
                 </div>
                 <button type="submit" disabled={blogSubmitting} className="px-4 py-2 bg-[#2B1E17] text-white rounded text-sm disabled:opacity-60">
