@@ -508,7 +508,7 @@ export default function About() {
               Our Journey
             </h2>
             <p
-              className="text-sm max-w-2xl mx-auto leading-relaxed"
+              className="text-sm max-w-2xl mx-auto text-justify-center leading-relaxed"
               style={{ color: '#4A5565', fontWeight: 400 }}
             >
              Officially registered with the Department of Tourism, U.T. Ladakh - dedicated to experiential and responsible tourism in the Himalayas.
@@ -542,7 +542,7 @@ export default function About() {
 
                     {/* Text Content */}
                     <div>
-                      <h3 className="text-lg mb-1 font-semibold text-[#2B1E17]">
+                      <h3 className="text-lg mb-1 font-semibold  text-[#2B1E17]">
                         {step.title}
                       </h3>
 
@@ -550,7 +550,7 @@ export default function About() {
                         {step.subtitle}
                       </p>
 
-                      <p className="text-sm leading-relaxed text-[#4A5565]" style={{ lineHeight: "1.7" }}>
+                      <p className="text-sm leading-relaxed text-justify text-[#4A5565]" style={{ lineHeight: "1.7" }}>
                         {step.description}
                       </p>
                     </div>
@@ -625,7 +625,7 @@ export default function About() {
                         </p>
 
                         <p
-                          className="text-sm leading-relaxed"
+                          className="text-sm text-justify leading-relaxed"
                           style={{ color: '#4A5565', fontWeight: 400, lineHeight: '1.7' }}
                         >
                           {step.description}
@@ -642,34 +642,34 @@ export default function About() {
         </div>
 
         {/* Bottom Highlight Bar */}
-<div className="max-w-5xl mx-auto px-6 mt-8 relative -top-10">
+<div className="max-w-5xl mx-auto px-4 sm:px-6 mt-8 relative -top-10">
   <div
-    className="rounded-2xl py-7"
+    className="rounded-2xl py-6 sm:py-7"
     style={{ backgroundColor: "#281910" }}
   >
-    <div className="px-6">
+    <div className="px-4 sm:px-6">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
 
         {/* Item 1 */}
-        <div className="flex items-start justify-center gap-3">
-          <Award className="w-6 h-6 text-[#F4A321] mt-[2px]" />
+        <div className="flex items-center justify-start gap-3">
+          <Award className="w-6 h-6 text-[#F4A321] shrink-0" />
           <p className="text-sm text-left leading-snug text-[#F3F4F1]">
             Official <br /> Tourism Registration
           </p>
         </div>
 
         {/* Item 2 */}
-        <div className="flex items-start justify-center gap-3">
-          <Mountain className="w-6 h-6 text-[#F4A321] mt-[2px]" />
+        <div className="flex items-center justify-start gap-3">
+          <Mountain className="w-6 h-6 text-[#F4A321] shrink-0" />
           <p className="text-sm text-left leading-snug text-[#F3F4F1]">
             Ladakh <br /> "Little Tibet" Focus
           </p>
         </div>
 
         {/* Item 3 */}
-        <div className="flex items-start justify-center gap-3">
-          <Heart className="w-6 h-6 text-[#F4A321] mt-[2px]" />
+        <div className="flex items-center justify-start gap-3">
+          <Heart className="w-6 h-6 text-[#F4A321] shrink-0" />
           <p className="text-sm text-left leading-snug text-[#F3F4F1]">
             Cultural <br /> Preservation Mission
           </p>
