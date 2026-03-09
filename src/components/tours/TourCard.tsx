@@ -20,10 +20,10 @@ const TourCard = ({ tour }: TourCardProps) => {
   };
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-md overflow-hidden">
+    <div className="w-full h-full bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
 
       {/* IMAGE SECTION */}
-     <div className="relative h-[200px] overflow-hidden rounded-t-xl">
+     <div className="relative h-[180px] sm:h-[200px] overflow-hidden rounded-t-xl flex-shrink-0">
 
   {/* Main Image */}
   <img
@@ -73,14 +73,14 @@ const TourCard = ({ tour }: TourCardProps) => {
 </div>
 
       {/* CONTENT */}
-      <div className="p-4 space-y-3">
+      <div className="p-4 flex flex-col flex-1 gap-3">
 
-        <h3 className="text-xl font-sm text-[#2b140c]">
+        <h3 className="text-xl font-medium text-[#2b140c] line-clamp-2 min-h-[56px]">
           {tour.title}
         </h3>
 
         {/* tags */}
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap min-h-[28px]">
           {tour.types.slice(0, 3).map((type) => (
             <span
               key={type}
@@ -91,13 +91,13 @@ const TourCard = ({ tour }: TourCardProps) => {
           ))}
         </div>
 
-        <p className="text-sm text-[#AAAAAA] line-clamp-3 py-2 whitespace-pre-line">
+        <p className="text-sm text-[#AAAAAA] line-clamp-3 flex-1 whitespace-pre-line">
           {tour.description || "Journey through the Himalayas with HHTrails."}
         </p>
 
         {/* button */}
         <button
-          className="w-full bg-[#2b140c] text-white py-3 rounded-lg text-sm font-medium"
+          className="w-full bg-[#2b140c] text-white py-3 rounded-lg text-sm font-medium mt-auto"
           onClick={() => navigate(`/tours/${tour.id}`)}
         >
           View Details →
