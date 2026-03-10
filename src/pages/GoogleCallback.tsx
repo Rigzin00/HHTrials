@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storageService } from '../utils/storage';
+import { supabase } from '../lib/supabaseClient';
 import { Loader2, AlertCircle } from 'lucide-react';
 
 /**
  * Google OAuth Callback Page
- * Handles the redirect from Supabase OAuth flow
- * Tokens are already authenticated - just extract and store them
+ * Handles the redirect from Supabase OAuth flow.
+ *
+ * Why we don't read window.location.hash directly:
+ * The Supabase client (detectSessionInUrl: true by default) immediately parses
+ * the OAuth hash on initialization and clears it via history.replaceState before
+ * React's useEffect fires.  We therefore ask Supabase for the already-processed
+ * session instead of re-parsing the (now-empty) hash.
  */
 export default function GoogleCallback() {
   const navigate = useNavigate();
@@ -15,30 +21,36 @@ export default function GoogleCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Get the hash params from URL
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        
-        // Extract tokens from Supabase OAuth callback
-        const accessToken = hashParams.get('access_token');
-        const refreshToken = hashParams.get('refresh_token');
-        const expiresIn = hashParams.get('expires_in');
-        const expiresAt = hashParams.get('expires_at');
-        const errorParam = hashParams.get('error');
-        const errorDescription = hashParams.get('error_description');
+        // Check for an error in the hash/query before Supabase clears it.
+        // We capture it synchronously at render time to survive the replaceState.
+        const rawHash = new URLSearchParams(window.location.hash.substring(1));
+        const rawQuery = new URLSearchParams(window.location.search);
+        const errorParam = rawHash.get('error') ?? rawQuery.get('error');
+        const errorDescription = rawHash.get('error_description') ?? rawQuery.get('error_description');
 
         if (errorParam) {
           throw new Error(errorDescription || errorParam);
         }
 
-        if (!accessToken || !refreshToken) {
+        // Supabase has already parsed the OAuth hash and stored the session
+        // (detectSessionInUrl: true).  Retrieve it from the client directly.
+        const { data, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        const supabaseSession = data?.session;
+
+        if (!supabaseSession?.access_token || !supabaseSession?.refresh_token) {
           throw new Error('No authentication tokens received');
         }
 
+        const { access_token: accessToken, refresh_token: refreshToken, expires_in, expires_at } = supabaseSession;
+
         console.log('Supabase OAuth tokens received, extracting user info...');
-        
+
         // Decode Supabase JWT to get user info (already verified by Supabase)
         const payload = JSON.parse(atob(accessToken.split('.')[1]));
-        
+
         const user = {
           id: payload.sub,
           email: payload.email,
@@ -46,19 +58,19 @@ export default function GoogleCallback() {
           avatar: payload.user_metadata?.avatar_url || payload.user_metadata?.picture,
           emailVerified: payload.user_metadata?.email_verified,
         };
-        
+
         const session = {
           accessToken,
           refreshToken,
-          expiresIn: expiresIn ? parseInt(expiresIn) : 3600,
-          expiresAt: expiresAt ? parseInt(expiresAt) : Math.floor(Date.now() / 1000) + 3600,
+          expiresIn: expires_in ?? 3600,
+          expiresAt: expires_at ?? Math.floor(Date.now() / 1000) + 3600,
         };
 
         // Store session (no need to call backend - already authenticated)
         storageService.setSession(session, user);
-        
+
         console.log('Successfully authenticated with Google!', user);
-        
+
         // Get the return URL or default to home
         const returnUrl = sessionStorage.getItem('google_auth_return') || '/';
         sessionStorage.removeItem('google_auth_return');
@@ -68,7 +80,7 @@ export default function GoogleCallback() {
       } catch (err) {
         console.error('Google auth callback error:', err);
         setError(err instanceof Error ? err.message : 'Authentication failed');
-        
+
         // Redirect to home after a delay
         setTimeout(() => {
           navigate('/', { replace: true });
