@@ -23,14 +23,14 @@ const TourCard = ({ tour }: TourCardProps) => {
     <div className="w-full h-full bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
 
       {/* IMAGE SECTION */}
-     <div className="relative h-[180px] sm:h-[200px] overflow-hidden rounded-t-xl flex-shrink-0">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl flex-shrink-0">
 
-  {/* Main Image */}
-  <img
-    src={tour.photoUrl}
-    alt={tour.title}
-    className="w-full h-full object-cover"
-  />
+        {/* Main Image */}
+        <img
+          src={tour.photoUrl}
+          alt={tour.title}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
 
   {/* Top Brown Overlay Shape */}
   <img
@@ -59,28 +59,28 @@ const TourCard = ({ tour }: TourCardProps) => {
   </button>
 
   {/* Bottom Info */}
-  {/* Bottom Info */}
-<div className="absolute bottom-3 left-4 right-4 flex justify-between text-white text-sm z-20">
-  <span className="flex items-center gap-1">
-    <MapPin className="w-3.5 h-3.5" strokeWidth={2} />
-    {tour.region}
-  </span>
-  <span className="flex items-center gap-1">
-    <Calendar className="w-3.5 h-3.5" strokeWidth={2} />
-    {tour.durationNights}N / {tour.durationDays}D
-  </span>
-</div>
-</div>
+ 
+        <div className="absolute bottom-3 left-4 right-4 flex justify-between text-white text-sm z-20">
+          <span className="flex items-center gap-1">
+            <MapPin className="w-3.5 h-3.5" strokeWidth={2} />
+            {tour.region}
+          </span>
+          <span className="flex items-center gap-1">
+            <Calendar className="w-3.5 h-3.5" strokeWidth={2} />
+            {tour.durationNights}N / {tour.durationDays}D
+          </span>
+        </div>
+        </div>
 
       {/* CONTENT */}
-      <div className="p-4 flex flex-col flex-1 gap-3">
+      <div className="p-4 flex flex-col flex-1 gap-2.5">
 
-        <h3 className="text-xl font-medium text-[#2b140c] line-clamp-2 min-h-[56px]">
+        <h3 className="text-[17px] leading-snug font-semibold text-[#2b140c] line-clamp-2">
           {tour.title}
         </h3>
 
         {/* tags */}
-        <div className="flex gap-2 flex-wrap min-h-[28px]">
+        <div className="flex gap-1.5 flex-wrap">
           {tour.types.slice(0, 3).map((type) => (
             <span
               key={type}
@@ -91,17 +91,19 @@ const TourCard = ({ tour }: TourCardProps) => {
           ))}
         </div>
 
-        <p className="text-sm text-[#AAAAAA] line-clamp-3 flex-1 whitespace-pre-line">
-          {tour.description || "Journey through the Himalayas with HHTrails."}
+        <p className="text-[13px] leading-relaxed text-gray-500 line-clamp-3 flex-1 text-justify">
+          {tour.description || "Journey through the Himalayas with HHTrails — discover ancient trails, breathtaking landscapes, and rich cultural heritage."}
         </p>
 
-        {/* button */}
-        <button
-          className="w-full bg-[#2b140c] text-white py-3 rounded-lg text-sm font-medium mt-auto"
-          onClick={() => navigate(`/tours/${tour.id}`)}
-        >
-          View Details →
-        </button>
+        {/* divider */}
+        <div className="border-t border-gray-100 pt-2.5 mt-auto">
+          <button
+            className="w-full bg-[#2b140c] hover:bg-[#3d1f10] active:scale-[0.98] transition-all text-white py-2.5 rounded-lg text-sm font-medium tracking-wide"
+            onClick={() => navigate(`/tours/${tour.id}`)}
+          >
+            View Details →
+          </button>
+        </div>
       </div>
     </div>
   );
