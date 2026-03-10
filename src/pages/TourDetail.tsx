@@ -234,7 +234,7 @@ const ImgPlaceholder = ({ aspectRatio = "4/3", size = 40 }) => (
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 /* ── 1. HERO ── */
-const HeroSection = ({ tourData, bookmarked, onBookmark, isAuthenticated }: any) => {
+const HeroSection = ({ tourData, bookmarked, onBookmark, onCustomize, isAuthenticated }: any) => {
   const { title, tags, location, duration, difficulty, bestSeason, heroImage } = tourData;
   return (
  <section style={{ 
@@ -353,7 +353,7 @@ const HeroSection = ({ tourData, bookmarked, onBookmark, isAuthenticated }: any)
         Enquire Now
       </button>
 
-      <button
+      <button onClick={onCustomize}
         className="rounded-xl border border-white/70 text-white font-sans tracking-tight transition-all duration-300 hover:bg-yellow-500 hover:text-black hover:border-yellow-500"
         style={{ 
           padding: "clamp(5px, 1.5vw, 8px) clamp(12px, 3vw, 24px)", 
@@ -452,7 +452,7 @@ const loadSvgAsBase64 = async (src: string): Promise<string | null> => {
 };
 
 const downloadItineraryPDF = async (itinerary: any[], tourTitle = "Itinerary") => {
-  const logoBase64 = await loadSvgAsBase64("/hht_final_logo_send.svg");
+  // const logoBase64 = await loadSvgAsBase64("/hht_final_logo_send.svg");
 
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
@@ -466,11 +466,11 @@ const downloadItineraryPDF = async (itinerary: any[], tourTitle = "Itinerary") =
   doc.rect(0, 0, pageW, headerH, "F");
 
   // Logo on the right side of header
-  if (logoBase64) {
-    const logoH = 18;
-    const logoW = logoH * 3; // approximate aspect ratio
-    doc.addImage(logoBase64, "PNG", pageW - margin - logoW, (headerH - logoH) / 2, logoW, logoH);
-  }
+  // if (logoBase64) {
+  //   const logoH = 18;
+  //   const logoW = logoH * 3; // approximate aspect ratio
+  //   doc.addImage(logoBase64, "PNG", pageW - margin - logoW, (headerH - logoH) / 2, logoW, logoH);
+  // }
 
   // Title + subtitle on left
   doc.setTextColor(255, 255, 255);
@@ -580,7 +580,7 @@ const sendItineraryWhatsApp = (itinerary: any[], tourTitle = "Itinerary") => {
     lines.push("");
   });
   lines.push("— Heritage Himalaya Trails");
-  lines.push("heritagehimalayatrails.com");
+  lines.push("https://hhtrails.com");
   const text = encodeURIComponent(lines.join("\n"));
   window.open(`https://wa.me/?text=${text}`, "_blank", "noopener,noreferrer");
 };
@@ -1211,7 +1211,7 @@ const RecommendedSection = ({ recommendedTours, currentTitle }: any) => {
 };
 
 /* ── 11. FIXED BOTTOM CTA BAR ── */
-const FixedCTABar = () => (
+const FixedCTABar = ({ onCustomize }: any) => (
   // fixed-cta-bar class is targeted in index.css for mobile
   <div
     className="fixed-cta-bar"
@@ -1237,6 +1237,7 @@ const FixedCTABar = () => (
         Enquire Now
       </button>
       <button
+        onClick={onCustomize}
         className="cta-btn rounded-xl border border-white/70 text-white font-sans tracking-tight transition-all duration-300 hover:bg-yellow-500 hover:text-black hover:border-yellow-500"
         style={{ padding: "8px clamp(12px, 3vw, 24px)", fontSize: "clamp(0.75rem, 1.5vw, 0.875rem)" }}
       >
@@ -1274,6 +1275,234 @@ function groupItineraryDays(days: any[]) {
   return grouped;
 }
 
+
+
+const CustomizeTourModal = ({ open, onClose }: any) => {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  if (!open) return null;
+
+  const interests = [
+    { icon: "🏔️", label: "Mountain Trekking" },
+    { icon: "🛕", label: "Temple & Monastery Visits" },
+    { icon: "🍜", label: "Local Cuisine Tasting" },
+    { icon: "🏡", label: "Village Homestay" },
+    { icon: "🌅", label: "Sunrise/Sunset Views" },
+    { icon: "🧘", label: "Yoga & Meditation" },
+    { icon: "🎭", label: "Traditional Festivals" },
+    { icon: "🎨", label: "Cultural Workshops" },
+    { icon: "📸", label: "Photography Tours" }
+  ];
+
+  const toggleInterest = (item: string) => {
+    setSelected((prev) =>
+      prev.includes(item)
+        ? prev.filter((i) => i !== item)
+        : [...prev, item]
+    );
+  };
+
+  return (
+    <div
+      onClick={onClose}
+      className="font-sans fixed inset-0 bg-black/55 z-[2000] flex justify-center sm:justify-end items-center sm:items-stretch px-4 sm:px-0"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-[420px] sm:max-w-[480px] h-[92vh] sm:h-full rounded-xl sm:rounded-none p-5 sm:p-6 md:p-7 overflow-y-auto"
+        style={{
+          background: "#1a0e04",
+          color: "white",
+          boxShadow: "-10px 0 40px rgba(0,0,0,0.45)"
+        }}
+      >
+        {/* HEADER */}
+        <div className="flex justify-between items-center">
+          <h2 className="font-berlin text-[26px] font-medium">
+            ✨ Customize Your Tour
+          </h2>
+
+          <button
+            onClick={onClose}
+            style={{
+              background: "#3b1e0f",
+              border: "none",
+              borderRadius: "50%",
+              width: 30,
+              height: 30,
+              color: "white",
+              cursor: "pointer",
+              fontSize: 16
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        <p className="text-[13px] text-[#c8b9a7] mt-1">
+          Create a journey that matches your interests
+        </p>
+
+        {/* TRIP BASICS */}
+        <div className="mt-6">
+          <h3 className="font-berlin text-[24px] mb-2">
+            Trip Basics
+          </h3>
+
+          <div className="border-b border-[#3a2517] mb-4" />
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            {/* Preferred Month */}
+            <div className="flex-1">
+              <label className="block text-[13px] mb-1 text-[#e6dcd0]">
+                Preferred Travel Month
+              </label>
+
+              <select
+                className="w-full px-3 py-2 rounded-xl bg-[#e9e9e9] text-black text-[14px]"
+              >
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+                <option>May</option>
+                <option>June</option>
+                <option>July</option>
+                <option>August</option>
+                <option>September</option>
+                <option>October</option>
+                <option>November</option>
+                <option>December</option>
+              </select>
+            </div>
+
+            {/* Number of People */}
+            <div className="flex-1">
+              <label className="block text-[13px] mb-1 text-[#e6dcd0]">
+                Number of People
+              </label>
+
+              <select className="w-full px-3 py-2 rounded-xl bg-[#e9e9e9] text-black text-[14px]">
+                {[...Array(10)].map((_, i) => (
+                  <option key={i + 1}>{i + 1}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* ITINERARY */}
+        <div className="mt-7">
+          <h4 className="text-[16px] mb-1">
+            📍 Add Your Itinerary
+          </h4>
+
+          <p className="text-[12px] text-[#b7a896] mb-3">
+            Select the experiences that interest you (you can choose multiple):
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {interests.map((item) => {
+              const active = selected.includes(item.label);
+
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => toggleInterest(item.label)}
+                  className={`flex items-center justify-center gap-2 px-4 py-2 rounded-full border text-[12px]
+                  ${active ? "bg-white/10 border-white/50" : "border-white/35"}
+                  `}
+                >
+                  <span>{item.icon}</span>
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ADDITIONAL PREFERENCES */}
+        <div className="mt-8">
+          <h4 className="text-[18px] font-medium mb-1">
+            Additional Preferences
+          </h4>
+
+          <p className="text-[13px] text-[#b7a896] mb-3">
+            Tell us more about what you'd like to experience:
+          </p>
+
+          <textarea
+            placeholder="Write your preferred itinerary..."
+            className="w-full h-[110px] rounded-xl p-3 bg-white/5 border border-white/30 text-[#f3e9dc] text-[14px]"
+          />
+
+          <p className="text-[12px] text-[#9b8a78] mt-2">
+            Our team will use this information to craft a personalized itinerary for you.
+          </p>
+        </div>
+
+        {/* CONTACT */}
+        <div className="mt-8">
+          <h3 className="font-berlin text-[28px] font-medium mb-2">
+            Contact Information
+          </h3>
+
+          <div className="border-b border-white/30 mb-4" />
+
+          <div className="mb-4">
+            <label className="block text-[14px] mb-1">
+              Full Name
+            </label>
+
+            <input
+              placeholder="Your name"
+              className="w-full bg-[#e8e8e8] text-black rounded-lg px-3 py-2 text-[14px]"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+            <div>
+              <label className="block text-[14px] mb-1">
+                Email
+              </label>
+
+              <input
+                placeholder="your@email.com"
+                className="w-full bg-[#e8e8e8] text-black rounded-lg px-3 py-2 text-[14px]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[14px] mb-1">
+                Phone
+              </label>
+
+              <input
+                placeholder="+91"
+                className="w-full bg-[#e8e8e8] text-black rounded-lg px-3 py-2 text-[14px]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* BUTTONS */}
+        <div className="flex flex-col sm:flex-row justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg border border-white/60 text-[#f3e9dc]"
+          >
+            Cancel
+          </button>
+
+          <button className="px-4 py-2 rounded-lg bg-[#e9e9e9] text-[#2b1a0f] font-medium">
+            Request Custom Itinerary
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ROOT PAGE COMPONENT
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1291,6 +1520,7 @@ function TourPageUI({
   const [localBookmarked, setLocalBookmarked] = useState(false);
   const bookmarked = bookmarkedProp !== undefined ? bookmarkedProp : localBookmarked;
   const { isAuthenticated } = useAuth();
+  const [showCustomize, setShowCustomize] = useState(false);
 
   const {
     title,
@@ -1307,7 +1537,7 @@ function TourPageUI({
 
   return (
     <div style={{ fontFamily: "'Source Serif 4', Georgia, serif", minHeight: "100vh", paddingBottom: 72, color: COLOR.textPrimary }}>
-      <HeroSection tourData={tourData} bookmarked={bookmarked} onBookmark={onBookmarkProp ?? (() => setLocalBookmarked((b) => !b))} isAuthenticated={isAuthenticated} />
+      <HeroSection tourData={tourData} bookmarked={bookmarked} onBookmark={onBookmarkProp ?? (() => setLocalBookmarked((b) => !b))} onCustomize={() => setShowCustomize(true)} isAuthenticated={isAuthenticated} />
       <OverviewSection overview={overview} />
       <HighlightsSection highlights={highlights} />
       <ItinerarySection itinerary={itinerary} tourTitle={title} />
@@ -1317,7 +1547,8 @@ function TourPageUI({
       <MapSection mapSection={mapSection} />
       <ReviewsSection reviews={reviews} />
       <RecommendedSection recommendedTours={recommendedTours} currentTitle={title} />
-      <FixedCTABar />
+      <FixedCTABar onCustomize={() => setShowCustomize(true)}/>
+      <CustomizeTourModal open={showCustomize} onClose={() => setShowCustomize(false)} />
     </div>
   );
 }

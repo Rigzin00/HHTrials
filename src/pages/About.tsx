@@ -642,44 +642,44 @@ export default function About() {
         </div>
 
         {/* Bottom Highlight Bar */}
-<div className="max-w-5xl mx-auto px-4 sm:px-6 mt-8 relative -top-10">
-  <div
-    className="rounded-2xl py-6 sm:py-7"
-    style={{ backgroundColor: "#281910" }}
-  >
-    <div className="px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto px-4 mt-8 relative -top-10">
+          <div
+            className="rounded-2xl py-6 sm:py-7"
+            style={{ backgroundColor: "#281910" }}
+          >
+            <div className="px-4 sm:px-6">
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
 
-        {/* Item 1 */}
-        <div className="flex items-center justify-start gap-3">
-          <Award className="w-6 h-6 text-[#F4A321] shrink-0" />
-          <p className="text-sm text-left leading-snug text-[#F3F4F1]">
-            Official <br /> Tourism Registration
-          </p>
+                {/* Item 1 */}
+                <div className="flex items-center justify-center gap-3">
+                  <Award className="w-6 h-6 text-[#F4A321] shrink-0" />
+                  <p className="text-sm text-left leading-snug text-[#F3F4F1]">
+                    Official <br /> Tourism Registration
+                  </p>
+                </div>
+
+                {/* Item 2 */}
+                <div className="flex items-center justify-center gap-4 md:gap-3">
+                  <Mountain className="w-6 h-6 text-[#F4A321] shrink-0 " />
+                  <p className="text-sm text-left leading-snug text-[#F3F4F1]">
+                    Ladakh <br /> "Little Tibet" Focus
+                  </p>
+                </div>
+
+                {/* Item 3 */}
+                <div className="flex items-center justify-center gap-3">
+                  <Heart className="w-6 h-6 text-[#F4A321] shrink-0" />
+                  <p className="text-sm text-left leading-snug text-[#F3F4F1]">
+                    Cultural <br /> Preservation Mission
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
         </div>
-
-        {/* Item 2 */}
-        <div className="flex items-center justify-start gap-3">
-          <Mountain className="w-6 h-6 text-[#F4A321] shrink-0" />
-          <p className="text-sm text-left leading-snug text-[#F3F4F1]">
-            Ladakh <br /> "Little Tibet" Focus
-          </p>
-        </div>
-
-        {/* Item 3 */}
-        <div className="flex items-center justify-start gap-3">
-          <Heart className="w-6 h-6 text-[#F4A321] shrink-0" />
-          <p className="text-sm text-left leading-snug text-[#F3F4F1]">
-            Cultural <br /> Preservation Mission
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-</div>
       </section>
 
       {/* Principles Section */}
@@ -720,7 +720,6 @@ export default function About() {
             }}
           >
             {principles.map((principle, index) => {
-              const IconComponent = principle.icon;
               return (
                 <div
                   key={index}
