@@ -3,10 +3,13 @@ interface Props {
   onSortChange: (value: string) => void;
   filteredCount: number;
   totalCount: number;
+  isFiltered: boolean;
 }
 
-const AvailableToursHeader = ({ sortBy, onSortChange, filteredCount, totalCount }: Props) => {
-  const filterLabel = filteredCount === totalCount ? "No filter applied" : "Filter applied";
+const AvailableToursHeader = ({ sortBy, onSortChange, filteredCount, totalCount, isFiltered }: Props) => {
+  const filterLabel = isFiltered ? "Filter applied" : "No filter applied";
+  const filteredLabel = filteredCount === 1 ? "tour" : "tours";
+  const totalLabel = totalCount === 1 ? "tour" : "tours";
 
   return (
     <div className="w-full bg-white mt-6 px-5 py-6 rounded-lg">
@@ -21,7 +24,7 @@ const AvailableToursHeader = ({ sortBy, onSortChange, filteredCount, totalCount 
           </h2>
 
           <p className="text-sm text-gray-500 mt-1">
-            Showing {filteredCount} of {totalCount} tours • {filterLabel}
+            Showing {filteredCount} {filteredLabel} of {totalCount} {totalLabel} • {filterLabel}
           </p>
         </div>
 
@@ -43,7 +46,7 @@ const AvailableToursHeader = ({ sortBy, onSortChange, filteredCount, totalCount 
             "
           >
             <option value="all">All</option>
-            <option value="popular">Popular</option>
+            <option value="shortest">Shortest</option>
             <option value="newest">Newest</option>
           </select>
         </div>
