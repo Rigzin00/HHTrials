@@ -18,6 +18,7 @@ const TourLayout = () => {
   const [duration, setDuration] = useState<number>(0);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState("all");
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     const load = async () => {
@@ -26,6 +27,7 @@ const TourLayout = () => {
         setError(null);
         const data = await toursService.getTours({ page: 1, limit: 10 });
         setTours(data.tours);
+        setTotalCount(data.pagination.total);
       } catch (err) {
         console.error(err);
         setError("Failed to load tours");
@@ -68,7 +70,7 @@ const TourLayout = () => {
       result = [...result].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-    } else if (sortBy === "popular") {
+    } else if (sortBy === "shortest") {
       result = [...result].sort((a, b) => a.durationDays - b.durationDays);
     }
 
@@ -113,7 +115,13 @@ const TourLayout = () => {
             sortBy={sortBy}
             onSortChange={setSortBy}
             filteredCount={filteredTours.length}
-            totalCount={tours.length}
+            totalCount={totalCount}
+            isFiltered={
+              selectedRegions.length > 0 ||
+              selectedTypes.length > 0 ||
+              selectedSeasons.length > 0 ||
+              duration > 0
+            }
           />
 
           {error && (
