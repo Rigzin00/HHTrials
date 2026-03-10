@@ -17,6 +17,7 @@ const TourLayout = () => {
   const [selectedSeasons, setSelectedSeasons] = useState<string[]>([]);
   const [duration, setDuration] = useState<number>(0);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [sortBy, setSortBy] = useState("all");
 
   useEffect(() => {
     const load = async () => {
@@ -37,7 +38,7 @@ const TourLayout = () => {
   }, []);
 
   const filteredTours = useMemo(() => {
-    return tours.filter((tour) => {
+    let result = tours.filter((tour) => {
       if (selectedRegions.length > 0 && !selectedRegions.includes(tour.region)) {
         return false;
       }
@@ -62,7 +63,17 @@ const TourLayout = () => {
 
       return true;
     });
-  }, [tours, selectedRegions, selectedTypes, selectedSeasons, duration]);
+
+    if (sortBy === "newest") {
+      result = [...result].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortBy === "popular") {
+      result = [...result].sort((a, b) => a.durationDays - b.durationDays);
+    }
+
+    return result;
+  }, [tours, selectedRegions, selectedTypes, selectedSeasons, duration, sortBy]);
 
   return (
     <div className="w-full py-8">
@@ -98,7 +109,12 @@ const TourLayout = () => {
 
         <div className="flex-1 min-w-0">
           <MapSection />
-          <AvailableToursHeader />
+          <AvailableToursHeader
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            filteredCount={filteredTours.length}
+            totalCount={tours.length}
+          />
 
           {error && (
             <p className="text-sm text-red-600 mb-3">{error}</p>
@@ -109,7 +125,7 @@ const TourLayout = () => {
           ) : filteredTours.length === 0 ? (
             <p className="text-sm text-gray-500">No tours match these filters.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 min-[480px]:grid-cols-2 gap-4 sm:gap-6">
               {filteredTours.map((tour) => (
                 <TourCard key={tour.id} tour={tour} />
               ))}

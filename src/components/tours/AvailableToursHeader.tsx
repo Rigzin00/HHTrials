@@ -1,4 +1,13 @@
-const AvailableToursHeader = () => {
+interface Props {
+  sortBy: string;
+  onSortChange: (value: string) => void;
+  filteredCount: number;
+  totalCount: number;
+}
+
+const AvailableToursHeader = ({ sortBy, onSortChange, filteredCount, totalCount }: Props) => {
+  const filterLabel = filteredCount === totalCount ? "No filter applied" : "Filter applied";
+
   return (
     <div className="w-full bg-white mt-6 px-5 py-6 rounded-lg">
 
@@ -12,7 +21,7 @@ const AvailableToursHeader = () => {
           </h2>
 
           <p className="text-sm text-gray-500 mt-1">
-            Showing 6 of 10 tours • No filter applied
+            Showing {filteredCount} of {totalCount} tours • {filterLabel}
           </p>
         </div>
 
@@ -21,6 +30,8 @@ const AvailableToursHeader = () => {
           <span className="text-sm text-gray-600">Sort by:</span>
 
           <select
+            value={sortBy}
+            onChange={(e) => onSortChange(e.target.value)}
             className="
               bg-[#2b140c]
               text-white
@@ -31,9 +42,9 @@ const AvailableToursHeader = () => {
               cursor-pointer
             "
           >
-            <option>All</option>
-            <option>Popular</option>
-            <option>Newest</option>
+            <option value="all">All</option>
+            <option value="popular">Popular</option>
+            <option value="newest">Newest</option>
           </select>
         </div>
 

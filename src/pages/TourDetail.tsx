@@ -9,6 +9,7 @@ import { homeService } from "../services/homeService";
 import type { TourDetails, ItineraryDay } from "../types/tour";
 import type { HomeTour } from "../types/home";
 import { useSavedTours } from "../contexts/SavedToursContext";
+import { useAuth } from "../hooks/useAuth";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // TOUR DATA
@@ -233,7 +234,7 @@ const ImgPlaceholder = ({ aspectRatio = "4/3", size = 40 }) => (
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 /* ── 1. HERO ── */
-const HeroSection = ({ tourData, bookmarked, onBookmark, onCustomize }: any) => {
+const HeroSection = ({ tourData, bookmarked, onBookmark, onCustomize, isAuthenticated }: any) => {
   const { title, tags, location, duration, difficulty, bestSeason, heroImage } = tourData;
   return (
  <section style={{ 
@@ -362,24 +363,26 @@ const HeroSection = ({ tourData, bookmarked, onBookmark, onCustomize }: any) => 
         Customize Tour
       </button>
 
-      <button
-        onClick={onBookmark}
-        title={bookmarked ? "Saved" : "Save tour"}
-        className={`flex items-center justify-center rounded-lg border border-white/40 backdrop-blur-sm transition-all duration-300 
-          ${bookmarked ? "bg-yellow-500 border-yellow-500" : "bg-white/10 hover:bg-yellow-500 hover:border-yellow-500"} 
-          hover:scale-105 active:scale-95`}
-        style={{ 
-          width: "clamp(30px, 5vw, 40px)", 
-          height: "clamp(28px, 4.5vw, 36px)",
-          flexShrink: 0,
-        }}
-      >
-        <Bookmark 
-          size={15} 
-          strokeWidth={1.8} 
-          className={`transition-colors duration-300 ${bookmarked ? "fill-black text-black" : "text-white"}`} 
-        />
-      </button>
+      {isAuthenticated && (
+        <button
+          onClick={onBookmark}
+          title={bookmarked ? "Saved" : "Save tour"}
+          className={`flex items-center justify-center rounded-lg border border-white/40 backdrop-blur-sm transition-all duration-300 
+            ${bookmarked ? "bg-yellow-500 border-yellow-500" : "bg-white/10 hover:bg-yellow-500 hover:border-yellow-500"} 
+            hover:scale-105 active:scale-95`}
+          style={{ 
+            width: "clamp(30px, 5vw, 40px)", 
+            height: "clamp(28px, 4.5vw, 36px)",
+            flexShrink: 0,
+          }}
+        >
+          <Bookmark 
+            size={15} 
+            strokeWidth={1.8} 
+            className={`transition-colors duration-300 ${bookmarked ? "fill-black text-black" : "text-white"}`} 
+          />
+        </button>
+      )}
     </div>
   </div>
 </section>
@@ -1516,6 +1519,7 @@ function TourPageUI({
 }) {
   const [localBookmarked, setLocalBookmarked] = useState(false);
   const bookmarked = bookmarkedProp !== undefined ? bookmarkedProp : localBookmarked;
+  const { isAuthenticated } = useAuth();
   const [showCustomize, setShowCustomize] = useState(false);
 
   const {
@@ -1533,7 +1537,7 @@ function TourPageUI({
 
   return (
     <div style={{ fontFamily: "'Source Serif 4', Georgia, serif", minHeight: "100vh", paddingBottom: 72, color: COLOR.textPrimary }}>
-      <HeroSection tourData={tourData} bookmarked={bookmarked} onBookmark={onBookmarkProp ?? (() => setLocalBookmarked((b) => !b))} onCustomize={() => setShowCustomize(true)} />
+      <HeroSection tourData={tourData} bookmarked={bookmarked} onBookmark={onBookmarkProp ?? (() => setLocalBookmarked((b) => !b))} onCustomize={() => setShowCustomize(true)} isAuthenticated={isAuthenticated} />
       <OverviewSection overview={overview} />
       <HighlightsSection highlights={highlights} />
       <ItinerarySection itinerary={itinerary} tourTitle={title} />
