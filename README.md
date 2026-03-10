@@ -2,11 +2,9 @@
 
 ## TO-DO
 
-### Tours Page
-- [ ] Filter Applied and Sorting Logic P
+- [ ] Redirect to hhtrails P
 
 ### Tour Detail Page
-- [ ] Don't show saved when not logged in P
 - [ ] CUSTOMIZE TOUR P
 
 ### Blog Page
