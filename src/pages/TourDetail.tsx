@@ -1261,7 +1261,7 @@ function groupItineraryDays(days: any[]) {
     const curr = days[i];
 
     const sameGroup =
-      curr.title === prev.title && curr.image === prev.image;
+      curr.title === prev.title ;
 
     if (sameGroup) {
       current.endDay = curr.day;
