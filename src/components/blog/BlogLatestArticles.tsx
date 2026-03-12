@@ -28,10 +28,10 @@ const BlogLatestArticles = ({ blogs }: Props) => {
                 {blog.coverImageUrl
                   ? <img src={blog.coverImageUrl} alt={blog.title} className="w-full h-full object-cover" />
                   : <div className="w-full h-full bg-gradient-to-br from-[#d6cfc8] to-[#b0a89e]" />}
-                <div
-                  className="absolute top-0 left-0 w-full h-[90px] bg-no-repeat bg-top bg-cover z-10 pointer-events-none"
+                {/* <div
+                  className="absolute top-0 left-0 w-full h-[65px] bg-no-repeat bg-top bg-cover z-10 pointer-events-none"
                   style={{ backgroundImage: "url('/Vector.svg')" }}
-                />
+                /> */}
                 <div className="absolute top-4 left-4 bg-[#f4a62a] text-white text-xs px-4 py-1 rounded-full font-medium z-20">
                   {blog.category}
                 </div>
