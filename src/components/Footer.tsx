@@ -163,15 +163,15 @@ export default function Footer() {
 
               <li className="flex gap-3 text-sm text-[#5C5346]">
                 <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <a href="tel:+919622992881" className="hover:text-[#3D3226] transition-colors duration-200">
-                  +9419218013 / 9622992881
+                <a href="tel:+919419218013" className="hover:text-[#3D3226] transition-colors duration-200">
+                  +91 9419218013
                 </a>
               </li>
 
               <li className="flex gap-3 text-sm text-[#5C5346]">
                 <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <a href="mailto:heritagetrails.ladakh@gmail.com" className="hover:text-[#3D3226] transition-colors duration-200">
-                  heritagetrails.ladakh@gmail.com
+                <a href="mailto:info.hhtrails.com" className="hover:text-[#3D3226] transition-colors duration-200">
+                  info.hhtrails.com 
 
                 </a>
               </li>

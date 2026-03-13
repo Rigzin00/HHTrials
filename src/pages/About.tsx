@@ -94,7 +94,7 @@ export default function About() {
                 <section
             className="relative flex items-center justify-center overflow-hidden"
             style={{
-              backgroundImage: 'url("/Container4.png")',
+              backgroundImage: 'url("/About.jpeg")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               marginTop: '72px',
