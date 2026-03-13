@@ -5,7 +5,7 @@ const BlogHeroSection = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('assets/Blog/Container.svg')"
+          backgroundImage: "url('/Blog.jpeg')"
         }}
       />
       
@@ -15,12 +15,12 @@ const BlogHeroSection = () => {
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
         {/* Title */}
-        <h1 className="text-[#281910] text-2xl md:text-3xl font-berlin font-medium  mb-3 tracking-wide">
+        <h1 className="text-[#edeceb] text-2xl md:text-3xl font-berlin font-medium  mb-3 tracking-wide">
           Blog & Stories
         </h1>
         
         {/* Subtitle */}
-        <p className="text-sm text-gray-200 max-w-xl leading-relaxed">
+        <p className="text-md text-[#edeceb] max-w-xl leading-relaxed">
           Explore journeys, culture, travel wisdom, and stories from the Himalayas.
         </p>
       </div>
