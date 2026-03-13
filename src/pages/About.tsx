@@ -236,15 +236,7 @@ export default function About() {
                     margin: 0,
                   }}
                 >
-                  A leading authority on Ladakh’s heritage,
-                   Dr. Wangchok has dedicated the past two 
-                   decades to preserving the rich cultural
-                  legacy of the Himalayas. A native of
-                  Khardong village in the Nubra Valley
-                   of Ladakh, he impeccably bridges academic 
-                  expertise with deep lived cultural experience,
-                   bringing scholarship and tradition together in
-                   meaningful ways.
+                  Dr. Sonam Wangchok has devoted the past two decades to preserving the rich cultural legacy of the Himalayas. He uniquely bridges academic expertise with deep lived cultural experience, bringing scholarship and tradition together in meaningful ways. Heritage Himalaya Trails (HHT) is an initiative to promote experiential and heritage tourism, drawing on his many years of experience and engagement in the field.
                 </p>
 
                 {/* Cards Grid */}
