@@ -2,7 +2,7 @@
 
 ## TO-DO
 
-- [ ] Redirect to hhtrails P
+- [ ] Saved tour button in Nav Bar MobView
 
 ### Tour Detail Page
 - [ ] CUSTOMIZE TOUR P
