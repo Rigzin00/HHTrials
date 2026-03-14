@@ -481,7 +481,7 @@ const downloadItineraryPDF = async (itinerary: any[], tourTitle = "Itinerary") =
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(220, 200, 190);
-  doc.text("Heritage Himalaya Trails  •  heritagehimalayatrails.com", margin, 22);
+  doc.text("Heritage Himalaya Trails  •  hhtrails.com", margin, 22);
 
   // ── "Day-by-Day Itinerary" subheading ──
   const subY = headerH + 12;

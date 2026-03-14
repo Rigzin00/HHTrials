@@ -13,7 +13,7 @@ interface SEOProps {
 const SITE_NAME = 'Heritage Himalaya Trails';
 const SITE_URL =
   (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, '') ??
-  'https://heritagehimalayatrails.com';
+  'https://hhtrails.com';
 
 const DEFAULT_DESCRIPTION =
   'Heritage Himalaya Trails – Authentic cultural and heritage tours across Ladakh and the Himalayan region. Discover ancient monasteries, Silk Route trails, and vibrant living traditions.';
