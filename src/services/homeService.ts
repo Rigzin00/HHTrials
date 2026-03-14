@@ -16,4 +16,11 @@ export const homeService = {
     );
     return res.data.tours;
   },
+
+  async allTours(limit = 50): Promise<HomeTour[]> {
+    const res = await apiClient.get<{ success: boolean; data: { tours: HomeTour[] } }>(
+      `/tours?limit=${limit}`
+    );
+    return res.data.tours;
+  },
 };

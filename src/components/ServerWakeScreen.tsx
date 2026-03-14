@@ -88,8 +88,8 @@ const ServerWakeScreen = ({ onReady }: Props) => {
 
       {/* Brand name */}
       <h1
-        className="text-[#2B1E17] text-xl font-semibold tracking-widest uppercase mb-1 justify-center text-center"
-        style={{ fontFamily: 'Berlin Sans FB, sans-serif', letterSpacing: '0.18em' }}
+        className="text-[#2B1E17]  font-berlin text-xl font-normal tracking-widest uppercase mb-1 justify-center text-center"
+        style={{  letterSpacing: '0.18em' }}
       >
         Heritage Himalaya Trails
       </h1>
