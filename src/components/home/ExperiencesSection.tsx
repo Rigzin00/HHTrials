@@ -35,12 +35,25 @@
 
   const ExperiencesSection = ({ tours }: ExperiencesSectionProps) => {
     const [recommended, setRecommended] = useState<HomeTour[] | null>(null);
+    const [currentPage, setCurrentPage] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
       if (!import.meta.env.VITE_API_BASE_URL) return;
       homeService.recommended()
-        .then(setRecommended)
+        .then(async (toursData) => {
+          if (toursData.length > 3) {
+            setRecommended(toursData);
+            return;
+          }
+
+          try {
+            const allTours = await homeService.allTours();
+            setRecommended(allTours.length > 0 ? allTours : toursData);
+          } catch {
+            setRecommended(toursData);
+          }
+        })
         .catch((err) => console.error('Failed to load recommended tours', err));
     }, []);
 
@@ -58,6 +71,28 @@
       : recommended
         ? recommended.map(toMap)
         : experiences;
+
+    const CARDS_PER_PAGE = 3;
+    const totalPages = Math.max(1, Math.ceil(displayCards.length / CARDS_PER_PAGE));
+
+    useEffect(() => {
+      setCurrentPage(0);
+    }, [displayCards.length]);
+
+    const paginatedCards = displayCards.slice(
+      currentPage * CARDS_PER_PAGE,
+      currentPage * CARDS_PER_PAGE + CARDS_PER_PAGE,
+    );
+
+    const handlePrevious = () => {
+      if (displayCards.length <= CARDS_PER_PAGE) return;
+      setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
+    };
+
+    const handleNext = () => {
+      if (displayCards.length <= CARDS_PER_PAGE) return;
+      setCurrentPage((prev) => (prev + 1) % totalPages);
+    };
 
     return (
       <section className="w-full bg-[#f5f5f5] py-16">
@@ -77,8 +112,9 @@
             <p className="text-center text-sm text-gray-400 py-12">No tours found for your search.</p>
           ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayCards.map((experience) => (
+            {paginatedCards.map((experience) => (
               <ExperienceCard
+                key={experience.id}
                 id={experience.id}
                 image={experience.image}
                 title={experience.title}
@@ -93,14 +129,26 @@
           {/* Bottom Controls */}
           <div className="flex items-center justify-center gap-4 mt-10">
             {/* Left Arrow Button */}
-            <button className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors duration-300">
+            <button
+              type="button"
+              onClick={handlePrevious}
+              disabled={displayCards.length <= CARDS_PER_PAGE}
+              aria-label="Show previous tours"
+              className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
 
             {/* Right Arrow Button */}
-            <button className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors duration-300">
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={displayCards.length <= CARDS_PER_PAGE}
+              aria-label="Show next tours"
+              className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
