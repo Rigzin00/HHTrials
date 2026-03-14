@@ -6,6 +6,7 @@ import { storageService } from '../services/storageService';
 import { apiClient } from '../services/apiClient';
 import type { Tour, TourDetails, ItineraryDay } from '../types/tour';
 import type { Blog } from '../types/blog';
+import SEO from '../components/SEO';
 
 interface FormState {
   id?: string;
@@ -672,6 +673,7 @@ const AdminPage = () => {
 
   return (
     <div className="flex-grow pt-[72px] min-h-screen bg-[#F7F6F2]">
+      <SEO title="Admin" noindex />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-3xl font-semibold text-[#2B1E17]">Admin</h1>

@@ -10,6 +10,7 @@ import type { TourDetails, ItineraryDay } from "../types/tour";
 import type { HomeTour } from "../types/home";
 import { useSavedTours } from "../contexts/SavedToursContext";
 import { useAuth } from "../hooks/useAuth";
+import SEO from "../components/SEO";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // TOUR DATA
@@ -1503,6 +1504,8 @@ const CustomizeTourModal = ({ open, onClose }: any) => {
   );
 };
 
+const MAX_META_DESCRIPTION_LENGTH = 155;
+
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ROOT PAGE COMPONENT
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1673,11 +1676,20 @@ export default function TourDetail() {
   );
 
   return (
-    <TourPageUI
-      tourData={apiTourData}
-      itinerary={apiItinerary ?? defaultItinerary}
-      bookmarked={id ? isSaved(id) : false}
-      onBookmark={id ? () => void toggleSave(id) : undefined}
-    />
+    <>
+      <SEO
+        title={apiTourData.title}
+        description={apiTourData.overview
+          ? `${String(apiTourData.overview).slice(0, MAX_META_DESCRIPTION_LENGTH)}…`
+          : `Explore ${apiTourData.title} – a cultural heritage tour in ${apiTourData.location} with Heritage Himalaya Trails.`}
+        image={apiTourData.heroImage || '/Heritage_walk.jpeg'}
+      />
+      <TourPageUI
+        tourData={apiTourData}
+        itinerary={apiItinerary ?? defaultItinerary}
+        bookmarked={id ? isSaved(id) : false}
+        onBookmark={id ? () => void toggleSave(id) : undefined}
+      />
+    </>
   );
 }
