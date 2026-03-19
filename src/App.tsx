@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 
 function ScrollToTop() {
@@ -19,10 +19,12 @@ import BlogDetail from './pages/BlogDetail';
 import SavedTours from './pages/SavedTours';
 import GoogleCallback from './pages/GoogleCallback';
 import Admin from './pages/Admin';
+import Developers from './pages/Developers.tsx';
 import ServerWakeScreen from './components/ServerWakeScreen';
 
 function App() {
   const hasApi = Boolean(import.meta.env.VITE_API_BASE_URL);
+  const showDevelopersPage = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEVELOPERS_PAGE === 'true';
   const [serverReady, setServerReady] = useState(!hasApi);
 
   const handleServerReady = useCallback(() => {
@@ -57,6 +59,10 @@ function App() {
             <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path="/saved-tours" element={<SavedTours />} />
             <Route path="/admin" element={<Admin />} />
+            <Route
+              path="/developers"
+              element={showDevelopersPage ? <Developers /> : <Navigate to="/" replace />}
+            />
           </Routes>
 
             <Footer />
