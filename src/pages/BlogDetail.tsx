@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { blogService } from '../services/blogService';
 import type { Blog } from '../types/blog';
 import { marked } from "marked";
+import SEO from '../components/SEO';
 marked.setOptions({
   gfm: true,
   breaks: true
@@ -128,6 +129,13 @@ export default function BlogDetail() {
 
   return (
     <>
+      <SEO
+        title={blog.title}
+        description={blog.shortDescription || blog.title}
+        image={blog.coverImageUrl || '/Blog.jpeg'}
+        type="article"
+        publishedTime={blog.publishedDate}
+      />
       <ReadingProgress />
 
       <article

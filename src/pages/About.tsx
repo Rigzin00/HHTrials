@@ -1,5 +1,6 @@
 import { Award, Eye, Users, MapPin, Heart, Leaf, Mountain, BookOpen, Building2, Clock,  UserCheck,Compass,Send} from 'lucide-react';
 import { Link } from "react-router-dom";
+import SEO from '../components/SEO';
 export default function About() {
  
 
@@ -90,6 +91,11 @@ export default function About() {
 
   return (
     <div className="bg-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <SEO
+        title="About Us – Our Story & Mission"
+        description="Learn about Heritage Himalaya Trails, officially registered with the Department of Tourism U.T. Ladakh. Led by Dr. Sonam Wangchok, we offer immersive, responsible cultural journeys in the Himalayas."
+        image="/About.jpeg"
+      />
       {/* Hero Section */}
                 <section
             className="relative flex items-center justify-center overflow-hidden"

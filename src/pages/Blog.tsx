@@ -9,6 +9,7 @@ import {
 } from '../components/blog';
 import { blogService } from '../services/blogService';
 import type { Blog } from '../types/blog';
+import SEO from '../components/SEO';
 
 const BlogPage = () => {
   const [category, setCategory] = useState('');
@@ -40,6 +41,11 @@ const BlogPage = () => {
 
   return (
     <div>
+      <SEO
+        title="Blog – Stories from the Himalayas"
+        description="Read travel stories, cultural insights, and heritage guides from Heritage Himalaya Trails. Explore articles about Ladakh, Buddhist traditions, and Himalayan life."
+        image="/Blog.jpeg"
+      />
       <BlogHeroSection />
       <div className="w-full bg-[#f5f5f5] py-16">
         <div className="max-w-6xl mx-auto px-6">

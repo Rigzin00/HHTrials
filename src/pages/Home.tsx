@@ -36,12 +36,18 @@ import {
   UpcomingToursSection,
 } from '../components/home';
 import type { HomeTour } from '../types/home';
+import SEO from '../components/SEO';
 const Home = () => {
    const [searchResults, setSearchResults] = useState<HomeTour[] | null>(null);
 
 
   return (
     <div className="flex-grow pt-[72px] min-h-screen bg-[#2B1E17]">
+      <SEO
+        title="Authentic Cultural Tours in Ladakh & the Himalayas"
+        description="Heritage Himalaya Trails – Explore Ladakh's ancient Silk Route, Buddhist monasteries, and Himalayan cultures with our award-winning, responsible travel experiences."
+        image="/Heritage_walk.jpeg"
+      />
       <HeroSection  />
       <PanoramaSwiper />
       <SearchBar

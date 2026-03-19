@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Bookmark, BookmarkX, MapPin, CalendarDays, ArrowRight } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useSavedTours } from '../contexts/SavedToursContext';
+import SEO from '../components/SEO';
 
 export default function SavedTours() {
   const { isAuthenticated } = useAuth();
@@ -71,6 +72,7 @@ export default function SavedTours() {
   // ── Saved tours grid ───────────────────────────────────────
   return (
     <div className="min-h-screen bg-[#F7F6F2] pt-[72px]">
+      <SEO title="Saved Tours" noindex />
       {/* Header */}
       <div className="bg-white border-b border-[#e8e4d8]">
         <div className="max-w-6xl mx-auto px-6 md:px-12 py-8">
