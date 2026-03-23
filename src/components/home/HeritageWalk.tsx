@@ -111,7 +111,7 @@ const HeritageWalk = () => {
                     onClick={() => setSelected(walk)}
                        className="w-full bg-[#2b1b14] hover:bg-[#3a261e] text-white text-sm rounded-md py-2 transition-colors duration-300"
         >
-                    View Details
+                    View Details →
                   </button>
                 </div>
               </div>

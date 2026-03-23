@@ -79,11 +79,14 @@ const ServerWakeScreen = ({ onReady }: Props) => {
     >
       {/* Logo */}
       <div className="mb-1">
-        <img
-          src="/hht_final_logo_send.svg"
-          alt="Heritage Himalaya Trails"
-          style={{ width: 180, height: 180, objectFit: 'contain' }}
-        />
+        <picture>
+          <source media="(max-width: 639px)" srcSet="/hht_final_logo_send_mobile.svg" />
+          <img
+            src="/hht_final_logo_send.svg"
+            alt="Heritage Himalaya Trails"
+            style={{ width: 180, height: 180, objectFit: 'contain' }}
+          />
+        </picture>
       </div>
 
       {/* Brand name */}
