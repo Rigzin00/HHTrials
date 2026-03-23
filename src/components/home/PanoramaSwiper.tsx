@@ -31,7 +31,7 @@
 
         const speed =
           window.innerWidth < 500 ? 2 :
-          window.innerWidth < 540 ? 4 : 3;
+          3;
 
           swiper.setTranslate(swiper.translate - speed);
 
