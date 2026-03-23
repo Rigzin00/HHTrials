@@ -66,11 +66,14 @@
         <div className="h-[64px] sm:h-[68px] lg:h-[72px] flex items-center justify-between px-4 sm:px-6 md:px-10 lg:px-16 max-w-screen-2xl mx-auto w-full">
           {/* Logo Section */}
           <Link to="/" className="flex-shrink-0">
-            <img
-              src="/hht_final_logo_send.svg"
-              alt="Heritage Himalaya Trails"
-              className="h-12 sm:h-14 lg:h-16 w-auto"
-            />
+            <picture>
+              <source media="(max-width: 639px)" srcSet="/hht_final_logo_send_mobile.svg" />
+              <img
+                src="/hht_final_logo_send.svg"
+                alt="Heritage Himalaya Trails"
+                className="h-12 sm:h-14 lg:h-16 w-auto"
+              />
+            </picture>
           </Link>
 
           {/* Desktop Navigation */}
