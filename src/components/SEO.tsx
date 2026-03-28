@@ -17,7 +17,7 @@ const SITE_URL =
 
 const DEFAULT_DESCRIPTION =
   'Heritage Himalaya Trails – Authentic cultural and heritage tours across Ladakh and the Himalayan region. Discover ancient monasteries, Silk Route trails, and vibrant living traditions.';
-const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`;
+const DEFAULT_IMAGE = `${SITE_URL}/imagewithfallback.png`;
 
 function setMeta(
   nameOrProperty: string,
@@ -58,7 +58,7 @@ function removeMeta(nameOrProperty: string, attr: 'name' | 'property' = 'propert
 }
 
 function toAbsoluteUrl(url: string, siteUrl: string): string {
-  if (!url) return `${siteUrl}/og-image.jpg`;
+  if (!url) return `${siteUrl}/imagewithfallback.png`;
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
   return `${siteUrl}${url.startsWith('/') ? '' : '/'}${url}`;
 }
