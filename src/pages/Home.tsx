@@ -46,7 +46,7 @@ const Home = () => {
       <SEO
         title="Authentic Cultural Tours in Ladakh & the Himalayas"
         description="Heritage Himalaya Trails – Explore Ladakh's ancient Silk Route, Buddhist monasteries, and Himalayan cultures with our award-winning, responsible travel experiences."
-        image="/Heritage_walk.jpeg"
+        image="/Heritage_walk.jpeg?v=20260406"
       />
       <HeroSection  />
       <PanoramaSwiper />
