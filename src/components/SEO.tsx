@@ -5,6 +5,7 @@ interface SEOProps {
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
   type?: 'website' | 'article';
   publishedTime?: string;
   noindex?: boolean;
@@ -63,10 +64,20 @@ function toAbsoluteUrl(url: string, siteUrl: string): string {
   return `${siteUrl}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
+function inferImageType(url: string): string {
+  const cleanUrl = url.split('?')[0].toLowerCase();
+  if (cleanUrl.endsWith('.png')) return 'image/png';
+  if (cleanUrl.endsWith('.webp')) return 'image/webp';
+  if (cleanUrl.endsWith('.gif')) return 'image/gif';
+  if (cleanUrl.endsWith('.svg')) return 'image/svg+xml';
+  return 'image/jpeg';
+}
+
 export default function SEO({
   title,
   description = DEFAULT_DESCRIPTION,
   image = DEFAULT_IMAGE,
+  imageAlt,
   type = 'website',
   publishedTime,
   noindex = false,
@@ -77,6 +88,8 @@ export default function SEO({
 
   // Resolve relative image paths to absolute URLs
   const absoluteImage = toAbsoluteUrl(image, SITE_URL);
+  const resolvedImageAlt = imageAlt || fullTitle;
+  const imageType = inferImageType(absoluteImage);
 
   useEffect(() => {
     // Page title
@@ -84,12 +97,21 @@ export default function SEO({
 
     // Basic meta
     setMeta('description', description);
-    setMeta('robots', noindex ? 'noindex,nofollow' : 'index,follow');
+    setMeta(
+      'robots',
+      noindex
+        ? 'noindex,nofollow'
+        : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1',
+    );
 
     // Open Graph
     setMeta('og:title', fullTitle, 'property');
     setMeta('og:description', description, 'property');
     setMeta('og:image', absoluteImage, 'property');
+    setMeta('og:image:secure_url', absoluteImage, 'property');
+    setMeta('og:image:url', absoluteImage, 'property');
+    setMeta('og:image:type', imageType, 'property');
+    setMeta('og:image:alt', resolvedImageAlt, 'property');
     setMeta('og:url', canonicalUrl, 'property');
     setMeta('og:type', type, 'property');
     setMeta('og:site_name', SITE_NAME, 'property');
@@ -106,6 +128,8 @@ export default function SEO({
     setMeta('twitter:title', fullTitle);
     setMeta('twitter:description', description);
     setMeta('twitter:image', absoluteImage);
+    setMeta('twitter:image:src', absoluteImage);
+    setMeta('twitter:image:alt', resolvedImageAlt);
     setMeta('twitter:site', '@HHTHimalaya');
 
     // Canonical link
@@ -114,7 +138,17 @@ export default function SEO({
     } else {
       setLink('canonical', canonicalUrl);
     }
-  }, [fullTitle, description, absoluteImage, type, canonicalUrl, noindex, publishedTime]);
+  }, [
+    fullTitle,
+    description,
+    absoluteImage,
+    resolvedImageAlt,
+    imageType,
+    type,
+    canonicalUrl,
+    noindex,
+    publishedTime,
+  ]);
 
   return null;
 }
