@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { authService } from '../services/authService';
+import { storageService } from '../utils/storage';
+import { supabase } from '../lib/supabaseClient';
 import type { User, SignUpRequest, SignInRequest, GoogleAuthRequest } from '../types/auth';
 
 interface AuthContextType {
@@ -31,7 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize auth state from storage
+  // Initialize auth state from storage and listen for Supabase OAuth callbacks
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -70,6 +72,55 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     initAuth();
+
+    // Listen for Supabase auth events (handles OAuth redirects that land on any page)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        try {
+          const { access_token: accessToken, refresh_token: refreshToken, expires_in, expires_at } = session;
+
+          // Decode JWT to extract user info
+          const payload = JSON.parse(atob(accessToken.split('.')[1]));
+          const supabaseUser: User = {
+            id: payload.sub,
+            email: payload.email,
+            fullName: payload.user_metadata?.full_name || payload.user_metadata?.name || '',
+            avatar: payload.user_metadata?.avatar_url || payload.user_metadata?.picture,
+            emailVerified: payload.user_metadata?.email_verified,
+          };
+
+          // Persist session to storage
+          storageService.setSession(
+            {
+              accessToken,
+              refreshToken: refreshToken ?? '',
+              expiresIn: expires_in ?? 3600,
+              expiresAt: expires_at ?? Math.floor(Date.now() / 1000) + 3600,
+            },
+            supabaseUser
+          );
+
+          setUser(supabaseUser);
+          setIsLoading(false);
+
+          // Clean up the OAuth hash/query from the URL without a page reload
+          if (window.location.hash.includes('access_token') || window.location.search.includes('access_token')) {
+            const returnUrl = sessionStorage.getItem('google_auth_return') || '/';
+            sessionStorage.removeItem('google_auth_return');
+            window.history.replaceState(null, '', returnUrl);
+          }
+        } catch (err) {
+          console.error('Failed to process Supabase SIGNED_IN event:', err);
+        }
+      } else if (event === 'SIGNED_OUT') {
+        storageService.clearSession();
+        setUser(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = useCallback(async (data: SignUpRequest) => {

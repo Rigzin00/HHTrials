@@ -3,7 +3,7 @@ import { X, Eye, EyeOff, User, Mail, Lock, Loader2, AlertCircle } from 'lucide-r
 import { useAuth } from '../contexts/AuthContext';
 import { validateSignUpForm, validateSignInForm } from '../utils/validation';
 import { ApiClientError } from '../services/apiClient';
-import { authService } from '../services/authService';
+import { supabase } from '../lib/supabaseClient';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -110,14 +110,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     setIsLoading(true);
 
     try {
-      // Store return URL for after authentication
-      sessionStorage.setItem('google_auth_return', window.location.href);
-      
-      // Get Google OAuth URL from backend and redirect
-      const authUrl = await authService.getGoogleAuthUrl();
-      
-      // Full page redirect to Google OAuth
-      window.location.href = authUrl;
+      // Store return URL so the callback page can redirect back here
+      sessionStorage.setItem('google_auth_return', window.location.pathname);
+
+      const redirectTo = `${window.location.origin}/google/callback`;
+
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo },
+      });
+
+      if (oauthError) throw oauthError;
+      // Supabase will redirect the browser to Google — no further action needed
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
