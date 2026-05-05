@@ -32,13 +32,23 @@ export default function GoogleCallback() {
           throw new Error(errorDescription || errorParam);
         }
 
-        // Supabase has already parsed the OAuth hash and stored the session
-        // (detectSessionInUrl: true).  Retrieve it from the client directly.
-        const { data, error: sessionError } = await supabase.auth.getSession();
+        // Supabase parses the OAuth hash asynchronously during initialisation
+        // (detectSessionInUrl: true). If it hasn't finished yet, wait up to 5 s
+        // for the SIGNED_IN event before giving up.
+        let supabaseSession = (await supabase.auth.getSession()).data?.session;
 
-        if (sessionError) throw sessionError;
-
-        const supabaseSession = data?.session;
+        if (!supabaseSession) {
+          supabaseSession = await new Promise((resolve) => {
+            const timeout = setTimeout(() => resolve(null), 5000);
+            const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+              if (event === 'SIGNED_IN' && session) {
+                clearTimeout(timeout);
+                subscription.unsubscribe();
+                resolve(session);
+              }
+            });
+          });
+        }
 
         if (!supabaseSession?.access_token || !supabaseSession?.refresh_token) {
           throw new Error('No authentication tokens received');

@@ -36,9 +36,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const initAuth = async () => {
       try {
         if (authService.isAuthenticated()) {
-          // Try to get current user from API
-          const currentUser = await authService.getCurrentUser();
-          setUser(currentUser);
+          try {
+            // Try to get current user from API
+            const currentUser = await authService.getCurrentUser();
+            setUser(currentUser);
+          } catch {
+            // API call failed (e.g. after Google OAuth the stored token may be a
+            // Supabase JWT that the custom backend doesn't recognise). Fall back
+            // to the user data stored locally during the OAuth callback.
+            const storedUser = authService.getStoredUser();
+            if (storedUser) {
+              setUser(storedUser);
+            } else {
+              await authService.signOut();
+              setUser(null);
+            }
+          }
         } else {
           // Try to get stored user
           const storedUser = authService.getStoredUser();
