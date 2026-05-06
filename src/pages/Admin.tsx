@@ -192,12 +192,14 @@ const AdminPage = () => {
 
   // ── Redeploy ──
   const [redeployStatus, setRedeployStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [showRedeployConfirm, setShowRedeployConfirm] = useState(false);
 
-  const handleRedeploy = async () => {
+  const confirmRedeploy = async () => {
+    setShowRedeployConfirm(false);
     const hookUrl = import.meta.env.VITE_CLOUDFLARE_DEPLOY_HOOK_URL as string | undefined;
     if (!hookUrl) {
       setRedeployStatus('error');
-      setTimeout(() => setRedeployStatus('idle'), 3000);
+      setTimeout(() => setRedeployStatus('idle'), 4000);
       return;
     }
     setRedeployStatus('loading');
@@ -205,9 +207,9 @@ const AdminPage = () => {
       const res = await fetch(hookUrl, { method: 'POST' });
       if (!res.ok) throw new Error(`Status ${res.status}`);
       setRedeployStatus('success');
+      setTimeout(() => setRedeployStatus('idle'), 8000);
     } catch {
       setRedeployStatus('error');
-    } finally {
       setTimeout(() => setRedeployStatus('idle'), 4000);
     }
   };
@@ -695,14 +697,44 @@ const AdminPage = () => {
 
   return (
     <div className="flex-grow pt-[72px] min-h-screen bg-[#F7F6F2]">
+      {/* ── Redeploy confirmation modal ── */}
+      {showRedeployConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+            <div className="flex items-start gap-3 mb-4">
+              <span className="text-2xl mt-0.5">⚠️</span>
+              <div>
+                <h2 className="text-base font-semibold text-[#2B1E17] mb-1">Redeploy Site?</h2>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Are you sure you want to redeploy? <strong>Redeploying unnecessarily may cause unknown errors</strong> and will consume build minutes. Only proceed if you have a specific reason to trigger a fresh deployment.
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-5">
+              <button
+                onClick={() => setShowRedeployConfirm(false)}
+                className="px-4 py-1.5 text-sm border rounded hover:bg-gray-50 text-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmRedeploy}
+                className="px-4 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Yes, Redeploy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <SEO title="Admin" noindex />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-3xl font-semibold text-[#2B1E17]">Admin</h1>
           <div className="flex items-center gap-2">
             <button
-              onClick={handleRedeploy}
-              disabled={redeployStatus === 'loading'}
+              onClick={() => setShowRedeployConfirm(true)}
+              disabled={redeployStatus === 'loading' || redeployStatus === 'success'}
               className={`text-xs border rounded px-3 py-1.5 transition-colors disabled:opacity-60 ${
                 redeployStatus === 'success'
                   ? 'bg-green-50 border-green-300 text-green-700'
@@ -712,11 +744,11 @@ const AdminPage = () => {
               }`}
             >
               {redeployStatus === 'loading'
-                ? 'Deploying…'
+                ? 'Triggering build…'
                 : redeployStatus === 'success'
-                ? '✓ Deployed'
+                ? '✓ Build triggered — deploying soon'
                 : redeployStatus === 'error'
-                ? '✗ Failed'
+                ? '✗ Failed to trigger'
                 : '⟳ Redeploy Site'}
             </button>
             <button
