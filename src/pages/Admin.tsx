@@ -190,6 +190,28 @@ const AdminPage = () => {
 
   const isEditing = Boolean(form.id);
 
+  // ── Redeploy ──
+  const [redeployStatus, setRedeployStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleRedeploy = async () => {
+    const hookUrl = import.meta.env.VITE_CLOUDFLARE_DEPLOY_HOOK_URL as string | undefined;
+    if (!hookUrl) {
+      setRedeployStatus('error');
+      setTimeout(() => setRedeployStatus('idle'), 3000);
+      return;
+    }
+    setRedeployStatus('loading');
+    try {
+      const res = await fetch(hookUrl, { method: 'POST' });
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      setRedeployStatus('success');
+    } catch {
+      setRedeployStatus('error');
+    } finally {
+      setTimeout(() => setRedeployStatus('idle'), 4000);
+    }
+  };
+
   const loadTours = async () => {
     try {
       setLoading(true);
@@ -677,12 +699,33 @@ const AdminPage = () => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-3xl font-semibold text-[#2B1E17]">Admin</h1>
-          <button
-            onClick={handleLogout}
-            className="text-xs text-gray-500 border rounded px-3 py-1.5 hover:bg-gray-50"
-          >
-            Sign Out
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleRedeploy}
+              disabled={redeployStatus === 'loading'}
+              className={`text-xs border rounded px-3 py-1.5 transition-colors disabled:opacity-60 ${
+                redeployStatus === 'success'
+                  ? 'bg-green-50 border-green-300 text-green-700'
+                  : redeployStatus === 'error'
+                  ? 'bg-red-50 border-red-300 text-red-700'
+                  : 'hover:bg-gray-50 text-gray-600'
+              }`}
+            >
+              {redeployStatus === 'loading'
+                ? 'Deploying…'
+                : redeployStatus === 'success'
+                ? '✓ Deployed'
+                : redeployStatus === 'error'
+                ? '✗ Failed'
+                : '⟳ Redeploy Site'}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="text-xs text-gray-500 border rounded px-3 py-1.5 hover:bg-gray-50"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
 
         {/* ── Section tabs ── */}
